@@ -1,6 +1,8 @@
 const cookieSession = require('cookie-session');
 const express = require('express');
 const passport = require('passport');
+const authRoute = require("./routes/auth")
+const passportSetup = require('./passport');
 const app = express();
 cors = require('cors');
 
@@ -19,7 +21,8 @@ app.use(cors({
     methods:"GET,PUT,POST,DELETE",
     credentials:true,
 }))
-
+// when we are on auth url ,automatically calls auth route
+app.use("/auth",authRoute);
 app.listen("5000",()=>{
     console.log("Server is running on port 5000")
 })

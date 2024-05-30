@@ -1,6 +1,7 @@
-
-
 function Login() {
+  const google = () => {
+    window.open("http://localhost:5000/auth/google","_self"); 
+  }
   return (
     <div className="flex min-h-[100dvh] items-center justify-center bg-gray-100 px-4 dark:bg-gray-950">
       <div className="mx-auto max-w-md space-y-6">
@@ -9,6 +10,7 @@ function Login() {
           <p className="mt-2 text-gray-500 text-lg dark:text-gray-400">Sign in to access your financial dashboard.</p>
         </div>
         <button
+          onClick={google}
           className="flex w-full items-center justify-center gap-2 rounded-md border-gray-300 bg-white px-4 py-2 text-gray-900 shadow-sm transition-colors hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-gray-950 focus:ring-offset-2 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-50 dark:hover:bg-gray-700 dark:focus:ring-gray-300">
           <ChromeIcon className="h-6 w-6" />
           Sign in with Google
