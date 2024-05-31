@@ -2,7 +2,6 @@ import Navbar from './components/Navbar';
 import { BrowserRouter,Routes,Route,Navigate } from 'react-router-dom';
 import Home from './pages/Home';
 import Login from './pages/Login';
-import axios from 'axios';
 import { useEffect,useState } from 'react';
 const App = () =>{
   const [user,setUser] = useState(null);
@@ -27,11 +26,6 @@ const App = () =>{
       console.log(err);
     })
     };
-    async function getStocks(){
-      const response = await axios.get("http://localhost:5000/stock/getstocks",{withCredentials:true});
-      console.log(response.data);
-    }
-    getStocks();
     getUser();
   },[])
   console.log(user);

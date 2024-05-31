@@ -1,5 +1,16 @@
 import {Link} from 'react-router-dom';
+import StockCard from '../components/StockCard';
+import { useEffect,useState } from 'react';
+import axios from 'axios';
 function Home({user}:any) {
+  const [stocks,setStocks] = useState([]);
+  useEffect(()=>{
+    async function getStocks(){
+      const response = await axios.get("http://localhost:5000/stock/getstocks",{withCredentials:true});
+      setStocks(response.data.slice(0,3 ));
+    }
+    getStocks();
+  },[])
   return (
     <div>
       {!user ? (
@@ -35,7 +46,28 @@ function Home({user}:any) {
         <div></div>
       )
       }
-      
+      <section className="w-full flex justify-center items-center h-[300px] py-12 md:py-24 lg:py-32">
+        <div className="container px-4 md:px-6 space-y-6">
+          <div className="flex flex-col items-center justify-center space-y-4 text-center">
+            <div className="space-y-2">
+              <div className="inline-block rounded-lg bg-gray-100 px-3 py-1 text-sm">
+                Featured Stocks
+              </div>
+              <h2 className="text-3xl font-bold tracking-tighter sm:text-5xl">Top Performing Stocks</h2>
+              <p className="max-w-[900px] text-gray-500 md:text-xl/relaxed lg:text-base/relaxed xl:text-xl/relaxed dark:text-gray-400">
+                Discover the latest stock trends and add them to your portfolio.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+      <div className='w-full flex items-center flex-row justify-evenly h-[400px]'>
+        {
+          stocks.map((stock:any)=>{
+            return <StockCard company={stock.company} name={stock.name} price={stock.price} change={stock.change}></StockCard>
+          })
+        }
+      </div>
     </div>
   )
 }
