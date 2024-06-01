@@ -7,7 +7,7 @@ function Home({user}:any) {
   useEffect(()=>{
     async function getStocks(){
       const response = await axios.get("http://localhost:5000/stock/getstocks",{withCredentials:true});
-      setStocks(response.data.slice(0,3 ));
+      setStocks(response.data.slice(0,3));
     }
     getStocks();
   },[])
@@ -46,7 +46,7 @@ function Home({user}:any) {
         <div></div>
       )
       }
-      <section className="w-full flex justify-center items-center h-[300px] py-12 md:py-24 lg:py-32">
+      <section className="w-full flex justify-center items-center h-[250px] py-12 md:py-24 lg:py-32">
         <div className="container px-4 md:px-6 space-y-6">
           <div className="flex flex-col items-center justify-center space-y-4 text-center">
             <div className="space-y-2">

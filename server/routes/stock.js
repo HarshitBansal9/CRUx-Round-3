@@ -1,5 +1,5 @@
 const router = require('express').Router();
-companies = ['AAPL','TSLA','AMZN','GOOG', 'MSFT', "IBM", "ACM",]
+companies = ['AAPL','TSLA','AMZN','GOOG', 'MSFT', "IBM", "ACM","NVDA","META"]
 
 const yahooFinance = require('yahoo-finance2').default;
 for (let i = 0; i < companies.length; i++) {
