@@ -2,6 +2,7 @@ import { ListOrdered } from "lucide-react"
 import { useState,useEffect } from "react";
 import { Menu, MenuButton, MenuItem, MenuItems,Transition } from '@headlessui/react'
 import axios from "axios";
+
 import StockCard_stockpage from "../components/StockCard_stockpage";
 function Stocks() {
     const [favouriteStocks,setFavouriteStocks] = useState<any>([]);
@@ -16,7 +17,7 @@ function Stocks() {
             flag = false;
         }
         if(sort==="default"){
-            return array.filter(function compare(x:any){return x.company.toLowerCase().includes(searchQuery)}).map((stock:any)=>{
+            return array.filter(function compare(x:any){;return x.company.toLowerCase().includes(searchQuery)}).map((stock:any)=>{
                 return <StockCard_stockpage sendDataToParent={handleDataFromChild} company={stock.company} name={stock.name} price={stock.price} change={stock.change} iffave={flag}></StockCard_stockpage>
             });;
         } else if(sort==="price"){

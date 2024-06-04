@@ -3,6 +3,7 @@ import { BrowserRouter,Routes,Route,Navigate } from 'react-router-dom';
 import Home from './pages/Home';
 import Stocks from './pages/Stocks';
 import Login from './pages/Login';
+import Details from './pages/Details';
 import { useEffect,useState } from 'react';
 const App = () =>{
   const [user,setUser] = useState(null);
@@ -29,7 +30,6 @@ const App = () =>{
     };
     getUser();
   },[])
-  console.log(user);
   return (
     <BrowserRouter>
     <div>
@@ -37,6 +37,7 @@ const App = () =>{
       <Routes>
         <Route path="/" element={<Home user={user}/>} />
         <Route path = "/stocks" element = {<Stocks/>} />
+        <Route path="/stocks/:name" element={<Details/>} />
         <Route path="/login" element={user?<Navigate to="/"/>:<Login />} />
       </Routes>
     </div>

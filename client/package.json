@@ -10,9 +10,15 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@canvasjs/charts": "^3.8.8",
+    "@canvasjs/react-charts": "^1.0.2",
     "@headlessui/react": "^2.0.4",
+    "@nivo/bar": "^0.87.0",
+    "@nivo/core": "^0.87.0",
+    "@nivo/line": "^0.87.0",
     "@radix-ui/react-dropdown-menu": "^2.0.6",
     "add": "^2.0.6",
+    "anychart-react": "^1.4.1",
     "axios": "^1.7.2",
     "dropdown-menu": "^0.1.1",
     "lucide-react": "^0.381.0",

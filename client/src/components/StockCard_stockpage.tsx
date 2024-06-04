@@ -1,6 +1,6 @@
 import { Heart } from "lucide-react";
 import { Minus } from "lucide-react";
-import { useState } from "react";
+import { Link } from "react-router-dom";
 interface IPROPS{
   company:string;
   name: string;
@@ -23,15 +23,17 @@ function StockCard_stockpage({company,name, price, change,sendDataToParent,iffav
     <div>
       <div className="bg-white flex flex-col mt-4 rounded-lg border-[1px] shadow-2xl border-gray-300 w-[250px] h-[200px]">
         <div className="h-[60px] w-full flex items-center">
-          <div className="ml-4 w-[150px] mt-4">
-            {company.split(" ").length > 3 ?(
-              <div className="text-sm font-bold hover:underline hover:cursor-pointer">{company}</div>
-            ):(
-              <div className="text-lg font-bold hover:underline hover:cursor-pointer">{company}</div>
-            )
-            }
-              <div className="text-gray-400 text-sm">{name}</div>
-          </div>
+          <Link to={`/stocks/${name}`}>
+            <div className="ml-4 w-[150px] mt-4">
+              {company.split(" ").length > 3 ?(
+                <div className="text-sm font-bold hover:underline hover:cursor-pointer">{company}</div>
+              ):(
+                <div className="text-lg font-bold hover:underline hover:cursor-pointer">{company}</div>
+              )
+              }
+                <div className="text-gray-400 text-sm">{name}</div>
+            </div>
+          </Link>
           {
           change < 0 ? 
           <div className="w-[60px] h-[30px] ml-3 bg-red-100 rounded-xl flex justify-center items-center"><div className="text-red-600 text-md">{change.toFixed(1)}%</div></div>:
