@@ -1,6 +1,6 @@
 const router = require('express').Router();
 companies = ['AAPL', 'TSLA', 'AMZN', 'GOOG', 'MSFT', "IBM", "ACM", "NVDA", "META", "TATAPOWER.NS", "GPS", "SAM", "MDB"]
-
+const pool = require("../db.ts");
 const yahooFinance = require('yahoo-finance2').default;
 router.get("/getstocks", async (req, res) => {
     let stock = [];
@@ -26,10 +26,23 @@ router.get("/gethistory", async (req, res) => {
         yahooFinance.chart(req.query.name, { period1: new Date(currDate.getTime() - 365 * 24 * 60 * 60 * 1000), period2: currDate, interval: "1d" }),
         yahooFinance.chart(req.query.name, { period1: new Date(currDate.getTime() - 30 * 24 * 60 * 60 * 1000), period2: currDate, interval: "1d" }),
         yahooFinance.chart(req.query.name, { period1: new Date(currDate.getTime() - 7 * 24 * 60 * 60 * 1000), period2: currDate, interval: "5m" }),
-        yahooFinance.chart(req.query.name, { period1: new Date(currDate.getTime() -  14 * 60 * 60 * 1000), period2: new Date(currDate.getTime() - 1 * 60 * 60 * 1000), interval: "1m" })
+        yahooFinance.chart(req.query.name, { period1: new Date(currDate.getTime() - 14 * 60 * 60 * 1000), period2: new Date(currDate.getTime() - 1 * 60 * 60 * 1000), interval: "1m" })
     ]);
     console.log("RAN");
     res.json({ year, month, week, day });
 })
 
+router.get("/addfavourite", async (req, res) => {   
+    await pool.query("UPDATE users SET favourite = array_append(favourite,$1) WHERE id = $2",[req.query.name,req.user.id]);
+    res.json({ success: true });
+})
+router.get("/getfavourite", async (req, res) => {
+    const user = await pool.query("SELECT * FROM users WHERE id = $1",[req.user.id]);
+    console.log(user.rows[0].favourite);
+    res.json(user.rows[0].favourite);
+})
+router.get("/removefavourite", async (req, res) => {
+    await pool.query("UPDATE users SET favourite = array_remove(favourite,$1) WHERE id = $2",[req.query.name,req.user.id]);
+    res.json({ success: true });
+})
 module.exports = router;

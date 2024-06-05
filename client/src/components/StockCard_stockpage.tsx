@@ -1,6 +1,7 @@
 import { Heart } from "lucide-react";
 import { Minus } from "lucide-react";
 import { Link } from "react-router-dom";
+import axios from "axios";
 interface IPROPS{
   company:string;
   name: string;
@@ -49,8 +50,17 @@ function StockCard_stockpage({company,name, price, change,sendDataToParent,iffav
         <div className="h-[60px] w-full flex flex-row mt-4 items-center">
           <div className="h-[30px] w-[80px] border-[1px] flex ml-6  mb-6 rounded-md hover:cursor-pointer items-center justify-center text-gray-500">Trade</div>
           {iffave?(
-          <div onClick={()=>{handleClick(true)}} className="h-[30px] w-[30px] flex ml-[90px]  mb-6 rounded-md hover:cursor-pointer items-center justify-center"><Minus></Minus></div>)
+          <div onClick={()=>{
+            async function removeFav(){
+              await axios.get("http://localhost:5000/stock/removefavourite",{params:{name:name},withCredentials:true});
+            }
+            removeFav();
+            handleClick(true)}} className="h-[30px] w-[30px] flex ml-[90px]  mb-6 rounded-md hover:cursor-pointer items-center justify-center"><Minus></Minus></div>)
           :(<div onClick={()=>{
+            async function addFav(){
+              await axios.get("http://localhost:5000/stock/addfavourite",{params:{name:name},withCredentials:true});
+            }
+            addFav();
             handleClick(false);
             }
           } 

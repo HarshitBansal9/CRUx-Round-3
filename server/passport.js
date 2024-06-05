@@ -15,7 +15,6 @@ passport.use(new GoogleStrategy({
       return cb(err, user);
     }); */
     const user = await pool.query("SELECT * FROM users");
-    console.log(user.rows);
     let flag = false;
     for (let i = 0; i < user.rows.length; i++) {
         if(user.rows[i].id === profile.id){
@@ -25,8 +24,8 @@ passport.use(new GoogleStrategy({
     }
     if (flag) {
         return;
-    }
-    const newUser =  await pool.query("INSERT INTO users (id,username) VALUES ($1,$2) RETURNING *",[profile.id,profile.displayName]);
+    } 
+    const newUser =  await pool.query("INSERT INTO users (id,username,favourite) VALUES ($1,$2,$3) RETURNING *",[profile.id,profile.displayName,[]]);
     done(null,profile)
   }
 ));

@@ -17,7 +17,7 @@ function Stocks() {
             flag = false;
         }
         if(sort==="default"){
-            return array.filter(function compare(x:any){;return x.company.toLowerCase().includes(searchQuery)}).map((stock:any)=>{
+            return array.filter(function compare(x:any){return x.company.toLowerCase().includes(searchQuery)}).map((stock:any)=>{
                 return <StockCard_stockpage sendDataToParent={handleDataFromChild} company={stock.company} name={stock.name} price={stock.price} change={stock.change} iffave={flag}></StockCard_stockpage>
             });;
         } else if(sort==="price"){
@@ -42,12 +42,26 @@ function Stocks() {
             setPopStocks(popStocks.filter((stock:any)=>stock.name!==data.name));
             setFavouriteStocks([...favouriteStocks,data]);
         }
-        console.log(favouriteStocks);
     }
     useEffect(()=>{ 
+        async function getFavStocks(array:any){
+            const response = await axios.get("http://localhost:5000/stock/getfavourite",{withCredentials:true});
+            let array1 = [];
+            let array2 = [];
+            for (let i = 0 ;i<array.length;i++){
+                if (response.data.includes(array[i].name)){
+                    console.log("Added",response.data,array[i].name);
+                    array1.push(array[i]);
+                } else {
+                    array2.push(array[i]);
+                }
+            }
+            setFavouriteStocks(array1);
+            setPopStocks(array2);
+        }
       async function getStocks(){
         const response = await axios.get("http://localhost:5000/stock/getstocks",{withCredentials:true});
-        setPopStocks(response.data);
+        getFavStocks(response.data);
       }
       getStocks();
     },[])
@@ -105,7 +119,7 @@ function Stocks() {
                         favouriteStocks.length === 0 ? 
                         <div className="text-md text-stone-500">No favorite stocks added yet.</div>:
                         <div className="w-full m-0 grid grid-cols-4 gap-4">
-                            {
+                            {   
                                 displayStocks(favouriteStocks)
                             }
                         </div>
