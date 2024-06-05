@@ -21,6 +21,7 @@
     "passport": "^0.5.3",
     "passport-google-oauth2": "^0.2.0",
     "passport-google-oauth20": "^2.0.0",
+    "pg": "^8.11.5",
     "request": "^2.88.2",
     "yahoo-finance2": "^2.11.3"
   },
