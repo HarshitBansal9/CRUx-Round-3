@@ -50,7 +50,6 @@ function Stocks() {
             let array2 = [];
             for (let i = 0 ;i<array.length;i++){
                 if (response.data.includes(array[i].name)){
-                    console.log("Added",response.data,array[i].name);
                     array1.push(array[i]);
                 } else {
                     array2.push(array[i]);
