@@ -109,7 +109,7 @@ function Stocks() {
                             </MenuItems>
                         </Transition>
                     </Menu>   
-            </div>
+                </div>
             </div>
             <div className="w-full flex flex-col mb-10 ml-10 mt-4">
                 <div className="text-2xl font-bold">Favourite Stocks</div>

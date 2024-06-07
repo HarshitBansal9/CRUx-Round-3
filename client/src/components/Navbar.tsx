@@ -22,7 +22,7 @@ const Navbar = ({user}:any) => {
       <div className="flex flex-row  justify-evenly w-[350px] absolute right-[30px]">
         <div><Link to="/stocks">Stocks</Link></div>
         <div><Link to="#">News</Link></div>
-        <div><Link to="#">Portfolio</Link></div>
+        <div><Link to="/portfolio">Portfolio</Link></div>
         {user ? (
           <div className="hover:cursor-pointer" onClick={Logout}>Logout</div>
         )

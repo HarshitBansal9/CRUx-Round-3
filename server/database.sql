@@ -6,7 +6,7 @@ CREATE TABLE users (
 );
 CREATE TABLE portfolios (
     portfolio_id SERIAL NOT NULL PRIMARY KEY,
-    available_cash DECIMAL(10,2),
+    available_amount DECIMAL(10,2),
     id VARCHAR(255),
     FOREIGN KEY(id) REFERENCES users(id)
 );

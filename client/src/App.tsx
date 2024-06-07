@@ -3,6 +3,7 @@ import { BrowserRouter,Routes,Route,Navigate } from 'react-router-dom';
 import Home from './pages/Home';
 import Stocks from './pages/Stocks';
 import Login from './pages/Login';
+import Portfolio from './pages/Portfolio';
 import Details from './pages/Details';
 import { useEffect,useState } from 'react';
 const App = () =>{
@@ -37,6 +38,7 @@ const App = () =>{
       <Routes>
         <Route path="/" element={<Home user={user}/>} />
         <Route path = "/stocks" element = {<Stocks/>} />
+        <Route path="/portfolio" element={<Portfolio/>} />
         <Route path="/stocks/:name" element={<Details/>} />
         <Route path="/login" element={user?<Navigate to="/"/>:<Login />} />
       </Routes>

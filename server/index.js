@@ -3,6 +3,7 @@ const express = require('express');
 const passport = require('passport');
 const authRoute = require("./routes/auth");
 const session = require('express-session');
+const portfolioRoute = require("./routes/portfolio");
 const stockRoute = require("./routes/stock");
 const passportSetup = require('./passport');
 const app = express();
@@ -31,6 +32,7 @@ app.use(cors({
 // when we are on auth url ,automatically calls auth route
 app.use("/auth", authRoute);
 app.use("/stock", stockRoute);
+app.use("/portfolio", portfolioRoute);
 
 
 

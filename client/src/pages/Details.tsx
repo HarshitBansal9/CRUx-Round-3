@@ -10,9 +10,12 @@ function Details() {
     const [history,setHistory] = useState<any>([]);
     const [data,setData] = useState<any>([]);
     const [stockDetails,setStockDetails] = useState<any>([]);
+    const [availableAmt,setAvailableAmt] = useState<number>(0);
     const [loading,setLoading] = useState<boolean>(false);
+    const [holdings,setHoldings] = useState<any>([]);
     const [currChoice,setCurrChoice] = useState<string>("1W");
-    const [currStocks,setCurrStocks] = useState<any>([]);
+    const [buyShares,setBuyShares] = useState<number>(0);
+    const [sellShares,setSellShares] = useState<number>(0);
     const [color,setColor] = useState<string>("");
     const path = location.pathname.split("/")[2];
     function presentedData(array:any){
@@ -30,31 +33,32 @@ function Details() {
     useEffect(()=>{
         async function getStocks(){     
             await axios.get("http://localhost:5000/stock/gethistory",{params:{name:path}}).then((res)=>{
+                console.log(res.data);
                 setHistory(res.data);
-                setCurrChoice('1D');
-                presentedData(res.data.day.quotes);
+                setCurrChoice('1Y');
+                presentedData(res.data.year.quotes);
                 setLoading(true);
             })
         }
+        async function getAmt(){
+            const response  = await axios.get("http://localhost:5000/portfolio/available_amount",{withCredentials:true});
+            setAvailableAmt(response.data.available_amount);
+        }
+        async function getHoldings(){
+            const response = await axios.get("http://localhost:5000/portfolio/get_holdings",{withCredentials:true});
+            setHoldings(response.data);
+        }
+        getHoldings();
+        getAmt();
         getStocks();
     },[]);
     useEffect(()=>{ 
-        async function getStocks(){
-          const response = await axios.get("http://localhost:5000/stock/getstocks",{withCredentials:true});
-          for (let i = 0; i < response.data.length; i++){
-            if (response.data[i].name === path){
-                setCurrStocks(response.data[i]);
-                break;
-            }
-          }
-        }
         async function getDetails(){
             const response = await axios.get("http://localhost:5000/stock/stockdetails",{params:{name:path}});
             console.log(response.data);
             setStockDetails(response.data);
         }
         getDetails();
-        getStocks();
       },[])
     useEffect(()=>{
         if (data.length === 0){
@@ -70,7 +74,7 @@ function Details() {
         <div className="flex items-center flex-col h-[800px]">
             <div className="w-full h-[70px] flex  border-b-[1px] items-center">
                 <div className="relative left-10 flex flex-col">
-                    <div className="text-2xl font-bold">{currStocks.company}</div>
+                    <div className="text-2xl font-bold">{stockDetails.longName}</div>
                     <div className="text-lg font-bold  text-gray-400">{path}</div>
                 </div>
                 <div className="w-[80px] h-[40px] bg-white border-[1px] rounded-lg flex items-center justify-center flex-end text-gray-600 hover:bg-gray-100 hover:cursor-pointer absolute right-[80px]">Trade</div>
@@ -78,10 +82,10 @@ function Details() {
             <div className="p-4 mt-4 h-[400px] w-[1230px] flex flex-col justify-center items-center border-[1px] rounded-lg shadow-xl">
                 <div className="w-full relative flex items-center border-b-[1px] pb-2 mb-3">
                     <div className="flex flex-col ml-5">
-                        <div className="text-2xl font-bold">${currStocks.price}</div>
-                        {currStocks.change < 0 ?(
-                            <div className="text-red-500">{(currStocks.change*currStocks.price/100)?.toFixed(2)} {`(${(currStocks.change)?.toFixed(2)}%)`}</div>
-                        ):<div className="text-green-500">{(currStocks.change*currStocks.price/100)?.toFixed(2)} {`(${(currStocks.change)?.toFixed(2)}%)`}</div>
+                        <div className="text-2xl font-bold">${stockDetails.regularMarketPrice}</div>
+                        {stockDetails.regularMarketChange < 0 ?(
+                            <div className="text-red-500">{(stockDetails.regularMarketChange*stockDetails.regularMarketPrice/100)?.toFixed(2)} {`(${(stockDetails.regularMarketChange)?.toFixed(2)}%)`}</div>
+                        ):<div className="text-green-500">{(stockDetails.regularMarketChange*stockDetails.regularMarketPrice/100)?.toFixed(2)} {`(${(stockDetails.regularMarketChange)?.toFixed(2)}%)`}</div>
                         }
                     </div>
                     <div className="absolute right-5">
@@ -208,7 +212,46 @@ function Details() {
                     <div className="h-[45px] w-[1/2] ml-2 mt-2 flex items-center text-md relative border-b-[1px] "><div className="text-gray-600 ml-2 absolute left-0">200 Day Average:</div><div className="font-bold absolute right-0 mr-3">{stockDetails.twoHundredDayAverage}</div></div>
                     <div className="h-[45px] w-[1/2] ml-2 mt-2 flex items-center text-md relative border-b-[1px] "><div className="text-gray-600 ml-2 absolute left-0">Trailing PE:</div><div className="font-bold absolute right-0 mr-3">{stockDetails.trailingPE}</div></div>
                 </div>
-                <div className="h-[280px] w-1/2 m-4 rounded-xl shadow-2xl bg-white"></div>
+                <div className="w-1/2 flex flex-col">
+                    <div className="h-[100px] w-full m-4 rounded-xl shadow-2xl bg-white">
+                        <div className="w-full flex justify-center font-bold text-2xl">BUY</div>
+                        <div className="ml-4">
+                            <div className="w-full flex justify-evenly items-center gap-8">
+                                <div className="">
+                                    <div className="">Number of Shares</div>
+                                    <input type="number" onChange={(e)=>{setBuyShares(Number(e.target.value))}} placeholder="Amount..." className="w-[150px] max-w-xs rounded-lg border-gray-300 bg-white px-4 py-2 text-sm border-[1px] focus:border-gray-500 focus:outline-none "/>
+                                </div>
+                                <div onClick={async ()=>{
+                                    if (buyShares*stockDetails.regularMarketPrice > availableAmt){
+                                        alert("Insufficient funds");
+                                        return;
+                                    }
+                                    await axios.get("http://localhost:5000/portfolio/buy",{params:{stock_ticker:path,number_of_shares:buyShares,avg_purchase_price:Number(stockDetails.regularMarketPrice),transaction_type:"BUY"},withCredentials:true});
+                                    alert("Transaction successful");
+                                }} className="border-[1px] rounded-lg w-[100px] h-[40px] flex justify-center items-center text-white bg-gray-800 hover:bg-gray-600 hover:cursor-pointer ">BUY</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div className="h-[100px] w-full m-4 rounded-xl shadow-2xl bg-white">
+                        <div className="w-full flex justify-center font-bold text-2xl">SELL</div>
+                        <div className="ml-4">
+                            <div className="w-full flex justify-evenly items-center gap-8">
+                                <div className="">
+                                    <div className="">Number of Shares</div>
+                                    <input type="number" onChange={(e)=>{setSellShares(Number(e.target.value))}} placeholder="Amount..." className="w-[150px] max-w-xs rounded-lg border-gray-300 bg-white px-4 py-2 text-sm border-[1px] focus:border-gray-500 focus:outline-none "/>
+                                </div>
+                                <div onClick={async ()=>{
+                                    if (sellShares > holdings.filter((holding:any)=>holding.stock_ticker === path)[0].number_of_shares){
+                                        alert("Insufficient shares");
+                                        return;
+                                    }
+                                    await axios.get("http://localhost:5000/portfolio/sell",{params:{stock_ticker:path,number_of_shares:sellShares,avg_purchase_price:Number(stockDetails.regularMarketPrice),transaction_type:"SELL"},withCredentials:true});
+                                    alert("Transaction successful");
+                                }} className="border-[1px] rounded-lg w-[100px] h-[40px] flex justify-center items-center text-white bg-gray-800 hover:bg-gray-600 hover:cursor-pointer ">SELL</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     )
