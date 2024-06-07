@@ -6,7 +6,7 @@ interface IPROPS{
 }
 function Holding({stock_ticker,shares, price}:IPROPS) {
   return (
-    <div className="grid grid-cols-4 items-center">
+    <div className="pb-2 pt-2 grid grid-cols-4 items-center">
         <Link to={`../stocks/${stock_ticker}`} className="flex hover:underline items-center gap-2">
             <span>{stock_ticker}</span>
         </Link>

@@ -2,6 +2,8 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import Holding from "../components/Holding";
 import Transaction from "../components/Transaction";
+import { ListOrdered } from "lucide-react";
+import { Menu, MenuButton, MenuItem, MenuItems,Transition } from '@headlessui/react'
 import { Link } from "react-router-dom";
 function Portfolio() {
     const [availableAmt,setAvailableAmt] = useState<number>(0);
@@ -9,8 +11,20 @@ function Portfolio() {
     const [searchedStock,setSearchedStock] = useState<string>("");
     const [details,setDetails] = useState<any>("Search For A Stock...")
     const [holdings,setHoldings] = useState<any>([]);
+    const [sort,setSort] = useState<string>("default");
     const [choice,setChoice] = useState<string>("buy");
     const [transactions,setTransactions] = useState<any>([]);
+    function displayHoldings(){
+        if(sort==="default"){
+            return holdings.map((holding:any)=>{return <Holding stock_ticker={holding.stock_ticker} shares={Number(holding.number_of_shares)} price={Number(holding.avg_purchase_price)}></Holding>});
+        } else if(sort==="price"){
+            return holdings.sort((a:any,b:any)=>Number(b.avg_purchase_price)-Number(a.avg_purchase_price)).map((holding:any)=>{return <Holding stock_ticker={holding.stock_ticker} shares={Number(holding.number_of_shares)} price={Number(holding.avg_purchase_price)}></Holding>});
+        } else if(sort==="value"){
+            return holdings.sort((a:any,b:any)=>Number(b.avg_purchase_price)*Number(b.number_of_shares)-Number(a.avg_purchase_price)*Number(a.number_of_shares)).map((holding:any)=>{return <Holding stock_ticker={holding.stock_ticker} shares={Number(holding.number_of_shares)} price={Number(holding.avg_purchase_price)}></Holding>});
+        } else if(sort==="shares"){
+            return holdings.sort((a:any,b:any)=>Number(b.number_of_shares)-Number(a.number_of_shares)).map((holding:any)=>{return <Holding stock_ticker={holding.stock_ticker} shares={Number(holding.number_of_shares)} price={Number(holding.avg_purchase_price)}></Holding>});
+        }
+    }
     useEffect(()=>{
         async function getAmt(){
             const response  = await axios.get("http://localhost:5000/portfolio/available_amount",{withCredentials:true});
@@ -44,17 +58,58 @@ function Portfolio() {
             </div>
                 <main className="flex-1 grid grid-cols-1 md:grid-cols-2 gap-8 p-8">
                     <section>
-                <h2 className="text-2xl font-bold mb-4">My Portfolio</h2>
+                <div className="flex flex-row w-full relative">
+                    <h2 className="text-2xl font-bold mb-4">My Portfolio</h2>
+                    <div className="absolute right-0">
+                        <Menu>
+                            <MenuButton className="border-[1px] w-[100px] h-[40px] rounded-md flex flex-row justify-evenly items-center"><ListOrdered size={18}></ListOrdered><div className="text-sm">Sort by</div></MenuButton>
+                            <Transition enter="transition ease-out duration-75" enterFrom="opacity-0 scale-95" enterTo="opacity-100 scale-100" leave="transition ease-in duration-100" leaveFrom="opacity-100 scale-100" leaveTo="opacity-0 scale-95">
+                                <MenuItems className="h-[162px] w-[100px] bg-white border-[1px] hover:cursor-pointer" anchor="bottom">
+                                    <MenuItem>
+                                    <div onClick={()=>{setSort("default")}} className="hover:bg-gray-200">
+                                    <a className="flex justify-center items-center p-2">
+                                        Default
+                                    </a>
+                                    </div>
+                                    </MenuItem>
+                                    <MenuItem>
+                                    <div onClick={()=>{setSort("price")}} className="hover:bg-gray-200">
+                                    <a className="flex justify-center items-center p-2">
+                                        Price
+                                    </a>
+                                    </div>
+                                    </MenuItem>
+                                    <MenuItem>
+                                    <div onClick={()=>{setSort("value")}} className="hover:bg-gray-200">
+                                    <a className="flex justify-center items-center p-2">
+                                        Value
+                                    </a>
+                                    </div>
+                                    </MenuItem>
+                                    <MenuItem>
+                                    <div onClick={()=>{setSort("shares")}} className="hover:bg-gray-200">
+                                    <a className="flex justify-center items-center p-2">
+                                        Shares
+                                    </a>
+                                    </div>
+                                    </MenuItem>
+                                </MenuItems>
+                            </Transition>
+                        </Menu>
+                    </div>
+                </div>
                 <div className="bg-gray-100 rounded-lg p-4 space-y-4">
                     <div className="grid grid-cols-4 items-center">
-                    <div className="font-medium">Stock</div>
-                    <div className="font-medium">Shares</div>
-                    <div className="font-medium">Price</div>
-                    <div className="font-medium text-right">Value</div>
+                        <div className="font-medium">Stock</div>
+                        <div className="font-medium">Shares</div>
+                        <div className="font-medium">Price</div>
+                        <div className="font-medium text-right">Value</div>
                     </div>
-                    {holdings.map((holding:any)=>{
-                        return <Holding stock_ticker={holding.stock_ticker} shares={Number(holding.number_of_shares)} price={Number(holding.avg_purchase_price)}></Holding>
-                    })}
+                    <div>
+                    {
+                        displayHoldings()
+                    }
+                    </div>
                 </div>
                 </section>
                 <section>
