@@ -30,7 +30,7 @@ router.get("/search_exact", async (req, res) => {
     }
 })
 router.get("/stockdetails", async (req, res) => {
-    const quote = await yahooFinance.quote(req.query.name)
+    const quote = await yahooFinance.quote(decodeURIComponent(req.query.name))
     res.json(quote);
 })
 router.get("/gethistory", async (req, res) => {
@@ -57,5 +57,11 @@ router.get("/getfavourite", async (req, res) => {
 router.get("/removefavourite", async (req, res) => {
     await pool.query("UPDATE users SET favourite = array_remove(favourite,$1) WHERE id = $2", [req.query.name, req.user.id]);
     res.json({ success: true });
+})
+
+router.get("/search", async (req, res) => {
+    const search = await yahooFinance.search(req.query.name, { region: "US", newsCount: 0 });
+    console.log(search);
+    res.json(search);
 })
 module.exports = router;

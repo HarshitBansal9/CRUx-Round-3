@@ -9,6 +9,8 @@ function Portfolio() {
     const [availableAmt,setAvailableAmt] = useState<number>(0);
     const [addAmt,setAddAmt] = useState<number>(0);
     const [searchedStock,setSearchedStock] = useState<string>("");
+    const [moneyInvested,setMoneyInvested] = useState<number>(0);
+    const [stocksSold,setStocksSold] = useState<number>(0);
     const [details,setDetails] = useState<any>("Search For A Stock...")
     const [holdings,setHoldings] = useState<any>([]);
     const [sort,setSort] = useState<string>("default");
@@ -39,6 +41,17 @@ function Portfolio() {
         async function getTransactions(){
             const response = await axios.get("http://localhost:5000/portfolio/get_transactions",{withCredentials:true});
             setTransactions(response.data);
+            let sum1 = 0;
+            let sum2 = 0;
+            for(let i =0;i<response.data.length;i++){
+                if (response.data[i].transaction_type === "BUY"){
+                    sum1+=Number(response.data[i].transaction_price);
+                } else {
+                    sum2+=Number(response.data[i].transaction_price);
+                }
+            }
+            setMoneyInvested(sum1);
+            setStocksSold(sum2);
         }
         getTransactions();
     },[]);
@@ -46,14 +59,23 @@ function Portfolio() {
         <div className="flex flex-col">
             <div className="w-full h-[100px] flex border-b-[1px] items-center relative">
                 <div className="text-3xl font-bold absolute left-10">Portfolio</div>
-                <div className="absolute right-1/2 ml-4 text-2xl font-bold">Available Amount:   ₹{availableAmt}</div>
                 <div className="w-[300px] absolute h-full items-center right-[5px] flex-row flex justify-evenly">
-                    <input onChange={(e)=>{setAddAmt(parseInt(e.target.value))}} type="text" placeholder="Add amount..." className="w-[150px] absol max-w-xs rounded-lg border-gray-300 bg-gray-100 px-4 py-2 text-sm border-[1px] focus:border-gray-500 focus:outline-none "/>
+                    <input onChange={(e)=>{setAddAmt(parseInt(e.target.value))}} type="Number" min="0" placeholder="Add amount..." className="w-[150px] absol max-w-xs rounded-lg border-gray-300 bg-gray-100 px-4 py-2 text-sm border-[1px] focus:border-gray-500 focus:outline-none "/>
                     <div onClick={async ()=>{
                         let x = Number(availableAmt)+Number(addAmt);
                         setAvailableAmt(x);
                         await axios.get("http://localhost:5000/portfolio/add_amount",{withCredentials:true,params:{amount:addAmt}});
                     }} className="border-[1px] w-[60px] flex justify-center hover:cursor-pointer hover:bg-white items-center rounded-lg bg-gray-100 h-[35px]">Add</div> 
+                </div>
+            </div>
+            <div className="w-full h-[100px] flex border-b-[1px] items-center relative">
+                <div className="text-2xl absolute left-10">Available Amount:   ${availableAmt}</div>
+                <div className="absolute flex justify-center right-[500px] flex-col">
+                    <div className="text-xl">Total Money Invested: ${moneyInvested}</div>
+                    <div className="text-xl">Total Holdings: ${holdings.reduce(((acc:number,curr:any)=>acc + curr.number_of_shares*curr.avg_purchase_price),0)}</div>
+                </div>
+                <div className="w-[300px] absolute h-full flex items-center right-[5px] text-2xl">
+                    Stocks Sold:${stocksSold}
                 </div>
             </div>
                 <main className="flex-1 grid grid-cols-1 md:grid-cols-2 gap-8 p-8">
@@ -130,8 +152,8 @@ function Portfolio() {
                     <h2 className="text-2xl font-bold mb-4">Trade</h2>
                     <div className="bg-gray-100 rounded-lg p-4 space-y-4">
                     <div className="w-full flex h-[40px] flex-row relative">
-                        <div onClick={()=>{setChoice("buy")}} className="text-gray-600 border-r-[1px] border-black pr-4 hover:text-gray-400 hover:cursor-pointer flex items-center">Buy</div>
-                        <div onClick={()=>{setChoice("sell")}} className="text-gray-600 border-l-[1px] border-black pl-4 hover:text-gray-400 hover:cursor-pointer flex items-center">Sell</div>
+                        {(choice==="buy")?(<div onClick={()=>{setChoice("buy")}} className="text-gray-600 border-r-[1px] border-black pr-4 hover:text-gray-400 underline hover:cursor-pointer flex items-center">Buy</div>):(<div onClick={()=>{setChoice("buy")}} className="text-gray-600 border-r-[1px] border-black pr-4 hover:text-gray-400 hover:cursor-pointer flex items-center">Buy</div>)}
+                        {(choice==="sell")?(<div onClick={()=>{setChoice("sell")}} className="text-gray-600 border-l-[1px] underline border-black pl-4 hover:text-gray-400 hover:cursor-pointer flex items-center">Sell</div>):(<div onClick={()=>{setChoice("sell")}} className="text-gray-600 border-l-[1px] border-black pl-4 hover:text-gray-400 hover:cursor-pointer flex items-center">Sell</div>)}
                         <div className="flex flex-row absolute right-4">
                             <input type="text" onChange={(e)=>{setSearchedStock(e.target.value)}} placeholder="Search Stock..." className="w-[150px] max-w-xs rounded-lg border-gray-300 bg-white px-4 py-2 text-sm border-[1px] focus:border-gray-500 focus:outline-none "/>
                             <div onClick={async ()=>{

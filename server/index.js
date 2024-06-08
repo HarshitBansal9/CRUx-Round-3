@@ -17,7 +17,7 @@ cors = require('cors');
 // }))
 
 
-
+app.use(express.urlencoded());
 app.use(session({ secret: "secret" }));
 app.use(passport.initialize());
 app.use(passport.session());

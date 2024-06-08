@@ -82,7 +82,7 @@ function Details() {
             <div className="p-4 mt-4 h-[400px] w-[1230px] flex flex-col justify-center items-center border-[1px] rounded-lg shadow-xl">
                 <div className="w-full relative flex items-center border-b-[1px] pb-2 mb-3">
                     <div className="flex flex-col ml-5">
-                        <div className="text-2xl font-bold">${stockDetails.regularMarketPrice}</div>
+                        <div className="text-2xl font-bold">{stockDetails.currency} {stockDetails.regularMarketPrice}</div>
                         {stockDetails.regularMarketChange < 0 ?(
                             <div className="text-red-500">{(stockDetails.regularMarketChange*stockDetails.regularMarketPrice/100)?.toFixed(2)} {`(${(stockDetails.regularMarketChange)?.toFixed(2)}%)`}</div>
                         ):<div className="text-green-500">{(stockDetails.regularMarketChange*stockDetails.regularMarketPrice/100)?.toFixed(2)} {`(${(stockDetails.regularMarketChange)?.toFixed(2)}%)`}</div>
@@ -219,15 +219,16 @@ function Details() {
                             <div className="w-full flex justify-evenly items-center gap-8">
                                 <div className="">
                                     <div className="">Number of Shares</div>
-                                    <input type="number" onChange={(e)=>{setBuyShares(Number(e.target.value))}} placeholder="Amount..." className="w-[150px] max-w-xs rounded-lg border-gray-300 bg-white px-4 py-2 text-sm border-[1px] focus:border-gray-500 focus:outline-none "/>
+                                    <input type="number" min="0" onChange={(e)=>{setBuyShares(Number(e.target.value))}} placeholder="Amount..." className="w-[150px] max-w-xs rounded-lg border-gray-300 bg-white px-4 py-2 text-sm border-[1px] focus:border-gray-500 focus:outline-none "/>
                                 </div>
                                 <div onClick={async ()=>{
+                                    if(buyShares<0){alert("Invalid number of shares");return;}
                                     if (buyShares*stockDetails.regularMarketPrice > availableAmt){
                                         alert("Insufficient funds");
                                         return;
                                     }
-                                    await axios.get("http://localhost:5000/portfolio/buy",{params:{stock_ticker:path,number_of_shares:buyShares,avg_purchase_price:Number(stockDetails.regularMarketPrice),transaction_type:"BUY"},withCredentials:true});
                                     alert("Transaction successful");
+                                    await axios.get("http://localhost:5000/portfolio/buy",{params:{stock_ticker:path,number_of_shares:buyShares,avg_purchase_price:Number(stockDetails.regularMarketPrice),transaction_type:"BUY"},withCredentials:true});
                                 }} className="border-[1px] rounded-lg w-[100px] h-[40px] flex justify-center items-center text-white bg-gray-800 hover:bg-gray-600 hover:cursor-pointer ">BUY</div>
                             </div>
                         </div>
@@ -241,6 +242,7 @@ function Details() {
                                     <input type="number" onChange={(e)=>{setSellShares(Number(e.target.value))}} placeholder="Amount..." className="w-[150px] max-w-xs rounded-lg border-gray-300 bg-white px-4 py-2 text-sm border-[1px] focus:border-gray-500 focus:outline-none "/>
                                 </div>
                                 <div onClick={async ()=>{
+                                    if(sellShares<0){alert("Invalid number of shares");return;}
                                     if (sellShares > holdings.filter((holding:any)=>holding.stock_ticker === path)[0].number_of_shares){
                                         alert("Insufficient shares");
                                         return;
