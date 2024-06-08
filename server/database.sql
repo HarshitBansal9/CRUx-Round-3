@@ -1,9 +1,16 @@
-CREATE DATABASE stockuser;
+DROP TABLE holdings;
+DROP TABLE transactions;
+DROP TABLE portfolios;
+
+DROP TABLE users;
 
 CREATE TABLE users (
     id VARCHAR(255) PRIMARY KEY,
     username VARCHAR(255) NOT NULL,
+    favourite VARCHAR(255) array[20]
 );
+
+
 CREATE TABLE portfolios (
     portfolio_id SERIAL NOT NULL PRIMARY KEY,
     available_amount DECIMAL(10,2),
@@ -26,6 +33,5 @@ CREATE TABLE transactions (
     transaction_type VARCHAR(50),
     number_of_shares DECIMAL(5,2),
     transaction_price DECIMAL(10,2),
-    transaction_date TIMESTAMP,
-    transaction_fees DECIMAL(10,2)
+    transaction_date DATE
 );

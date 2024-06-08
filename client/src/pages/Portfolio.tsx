@@ -27,6 +27,7 @@ function Portfolio() {
             return holdings.sort((a:any,b:any)=>Number(b.number_of_shares)-Number(a.number_of_shares)).map((holding:any)=>{return <Holding stock_ticker={holding.stock_ticker} shares={Number(holding.number_of_shares)} price={Number(holding.avg_purchase_price)}></Holding>});
         }
     }
+   
     useEffect(()=>{
         async function getAmt(){
             const response  = await axios.get("http://localhost:5000/portfolio/available_amount",{withCredentials:true});
@@ -60,7 +61,12 @@ function Portfolio() {
             <div className="w-full h-[100px] flex border-b-[1px] items-center relative">
                 <div className="text-3xl font-bold absolute left-10">Portfolio</div>
                 <div className="w-[300px] absolute h-full items-center right-[5px] flex-row flex justify-evenly">
-                    <input onChange={(e)=>{setAddAmt(parseInt(e.target.value))}} type="Number" min="0" placeholder="Add amount..." className="w-[150px] absol max-w-xs rounded-lg border-gray-300 bg-gray-100 px-4 py-2 text-sm border-[1px] focus:border-gray-500 focus:outline-none "/>
+                    <input onChange={(e)=>{
+                        if (parseInt(e.target.value) < 0){
+                            alert("Please enter a positive number");
+                            return;
+                        }
+                        setAddAmt(parseInt(e.target.value))}} type="Number" min="0" placeholder="Add amount..." className="w-[150px] absol max-w-xs rounded-lg border-gray-300 bg-gray-100 px-4 py-2 text-sm border-[1px] focus:border-gray-500 focus:outline-none "/>
                     <div onClick={async ()=>{
                         let x = Number(availableAmt)+Number(addAmt);
                         setAvailableAmt(x);
