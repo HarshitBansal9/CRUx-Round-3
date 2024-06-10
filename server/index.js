@@ -2,23 +2,25 @@
 const express = require('express');
 const passport = require('passport');
 const authRoute = require("./routes/auth");
-const session = require('express-session');
 const portfolioRoute = require("./routes/portfolio");
 const stockRoute = require("./routes/stock");
 const passportSetup = require('./passport');
 const app = express();
+const expressSession = require('express-session');
+const pgSession = require('connect-pg-simple')(expressSession);
+const pool = require("./db.ts");
 cors = require('cors');
-
-
-// app.use(cookieSession({
-//     name:"session",
-//     keys:["key1","key2"],
-//     maxAge:24*60*60*1000
-// }))
-
+app.use(expressSession({
+    store: new pgSession({
+      pool : pool,                // Connection pool
+      tableName : 'user_sessions'
+    }),
+    secret: process.env.FOO_COOKIE_SECRET,
+    resave: false,
+    cookie: { maxAge: 30 * 24 * 60 * 60 * 1000 } // 30 days
+  }));
 
 app.use(express.urlencoded());
-app.use(session({ secret: "secret" }));
 app.use(passport.initialize());
 app.use(passport.session());
 
