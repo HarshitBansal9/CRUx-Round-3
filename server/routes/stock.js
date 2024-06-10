@@ -17,7 +17,6 @@ router.get("/getstocks", async (req, res) => {
     res.json(stock);
 })
 router.get("/search_exact", async (req, res) => {
-    console.log(req.query.stock_ticker);
     try {
         const quote = await yahooFinance.quote(req.query.stock_ticker);
         if (quote === undefined) {
@@ -41,7 +40,6 @@ router.get("/gethistory", async (req, res) => {
         yahooFinance.chart(req.query.name, { period1: new Date(currDate.getTime() - 7 * 24 * 60 * 60 * 1000), period2: currDate, interval: "5m" }),
         yahooFinance.chart(req.query.name, { period1: new Date(currDate.getTime() - 14 * 60 * 60 * 1000), period2: new Date(currDate.getTime() - 1 * 60 * 60 * 1000), interval: "1m" })
     ]);
-    console.log("RAN");
     res.json({ year, month, week, day });
 })
 
@@ -51,7 +49,6 @@ router.get("/addfavourite", async (req, res) => {
 })
 router.get("/getfavourite", async (req, res) => {
     const user = await pool.query("SELECT * FROM users WHERE id = $1", [req.user.id]);
-    console.log(user.rows[0].favourite);
     res.json(user.rows[0].favourite);
 })
 router.get("/removefavourite", async (req, res) => {
@@ -61,7 +58,6 @@ router.get("/removefavourite", async (req, res) => {
 
 router.get("/search", async (req, res) => {
     const search = await yahooFinance.search(req.query.name, { region: "US", newsCount: 0 });
-    console.log(search);
     res.json(search);
 })
 module.exports = router;

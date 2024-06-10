@@ -3,7 +3,7 @@ const passport = require('passport');
 const CLIENT_URL = "http://localhost:5173/"
 
 router.get("/google", passport.authenticate('google', {
-    scope: ['profile']
+    scope: ['profile','email']
 }));
 
 router.get("/login/failed", (req, res) => {
@@ -13,8 +13,8 @@ router.get("/login/failed", (req, res) => {
     })
 })
 router.get("/login/success", (req, res) => {
+    console.log(req.user);  
     if (req.user) {
-        console.log("User", req.user)
         req.session.user = req.user;
         res.status(200).json({
             success: true,
