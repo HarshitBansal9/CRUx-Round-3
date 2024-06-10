@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
+import { Link } from "react-router-dom";
 interface IPROPS{
     stock_ticker:string;
     number_of_shares: number;
@@ -8,7 +9,7 @@ interface IPROPS{
     unrealizedGain:number;
 }
 export function getPriceColor(change:number){
-  return change > 0 ? 'text-green-300' : 'text-red-300';
+  return change > 0 ? 'text-green-500' : 'text-red-500';
 }
 function Holding({stock_ticker,number_of_shares, currentPrice,value,unrealizedGain}:IPROPS) {
   return (
@@ -21,11 +22,11 @@ function Holding({stock_ticker,number_of_shares, currentPrice,value,unrealizedGa
         <div className="text-right">${shares*price}</div>
     </div>*/
     <tr className="border-b">
-      <td className="py-4 px-4 font-medium">{stock_ticker}</td>
+      <Link to={`../stocks/${stock_ticker}`}><td className="py-4 px-4 hover:underline font-medium">{stock_ticker}</td></Link>
       <td className="py-4 px-4">{number_of_shares}</td>
       <td className="py-4 px-4">${currentPrice}</td>
       <td className="py-4 px-4">${(value).toFixed(2)}</td>
-      <td className={`py-4 px-4 ${getPriceColor(unrealizedGain)}`}>${(unrealizedGain).toFixed(2)}</td>
+      <td className={`py-4 font-bold px-4 ${getPriceColor(unrealizedGain)}`}>${(unrealizedGain).toFixed(2)}</td>
     </tr>
   )
 }

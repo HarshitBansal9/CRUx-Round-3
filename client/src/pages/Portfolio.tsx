@@ -34,15 +34,18 @@ function Portfolio() {
                 for (let j = 0;j<data.length;j++){
                     if (data[j].id===response.data[i].industry){
                         flag = true;
-                        data[j].value+=response.data[i].value;
+                        data[j].value+=Number(response.data[i].value);
+                        console.log(data[j].value);
                         break;
                     }
                 }
                 if (flag) {
                     continue
                 };
-                data.push({id:response.data[i].industry,value:response.data[i].value});
+                //console.log(response.data[i].value.toFixed(2));
+                data.push({id:response.data[i].industry,value:Number(response.data[i].value)});
             }
+            data = data.map((x:any)=>{return {id:x.id,label:x.id,value:x.value.toFixed(2)}});
             setSectorData(data);
             setHoldings(response.data);
         }

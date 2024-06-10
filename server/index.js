@@ -13,9 +13,9 @@ cors = require('cors');
 app.use(expressSession({
     store: new pgSession({
       pool : pool,                // Connection pool
-      tableName : 'user_sessions'
+      tableName : 'session'
     }),
-    secret: process.env.FOO_COOKIE_SECRET,
+    secret: 'secret',
     resave: false,
     cookie: { maxAge: 30 * 24 * 60 * 60 * 1000 } // 30 days
   }));
