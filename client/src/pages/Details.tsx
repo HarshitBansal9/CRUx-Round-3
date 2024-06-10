@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import { Line } from '@nivo/line';
 import { linearGradientDef } from '@nivo/core';
 import axios from "axios";
+import currencies from "../../currencies";
 import { ArrowDown, ChevronDown } from "lucide-react";
 import { Menu, MenuButton, MenuItem, MenuItems,Transition } from '@headlessui/react';
 function Details() {
@@ -48,18 +49,17 @@ function Details() {
             const response = await axios.get("http://localhost:5000/portfolio/get_holdings",{withCredentials:true});
             setHoldings(response.data);
         }
+        async function getDetails(){
+            const response = await axios.get("http://localhost:5000/stock/stockdetails",{params:{name:path}});
+            let test = response.data;
+            test.currency = test.currency.toUpperCase();
+            setStockDetails(test);
+        }
+        getDetails();
         getHoldings();
         getAmt();
         getStocks();
-    },[]);
-    useEffect(()=>{ 
-        async function getDetails(){
-            const response = await axios.get("http://localhost:5000/stock/stockdetails",{params:{name:path}});
-            console.log(response.data);
-            setStockDetails(response.data);
-        }
-        getDetails();
-      },[])
+    },[path]);
     useEffect(()=>{
         if (data.length === 0){
             setColor("green");
@@ -82,7 +82,7 @@ function Details() {
             <div className="p-4 mt-4 h-[400px] w-[1230px] flex flex-col justify-center items-center border-[1px] rounded-lg shadow-xl">
                 <div className="w-full relative flex items-center border-b-[1px] pb-2 mb-3">
                     <div className="flex flex-col ml-5">
-                        <div className="text-2xl font-bold">{stockDetails.currency} {stockDetails.regularMarketPrice}</div>
+                        <div className="text-2xl font-bold">{currencies[stockDetails.currency]} {stockDetails.regularMarketPrice}</div>
                         {stockDetails.regularMarketChange < 0 ?(
                             <div className="text-red-500">{(stockDetails.regularMarketChange*stockDetails.regularMarketPrice/100)?.toFixed(2)} {`(${(stockDetails.regularMarketChange)?.toFixed(2)}%)`}</div>
                         ):<div className="text-green-500">{(stockDetails.regularMarketChange*stockDetails.regularMarketPrice/100)?.toFixed(2)} {`(${(stockDetails.regularMarketChange)?.toFixed(2)}%)`}</div>

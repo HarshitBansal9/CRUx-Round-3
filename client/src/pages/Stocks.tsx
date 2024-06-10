@@ -18,19 +18,20 @@ function Stocks() {
         }
         if(sort==="default"){
             return array.filter(function compare(x:any){return x.company.toLowerCase().includes(searchQuery)}).map((stock:any)=>{
-                return <StockCard_stockpage sendDataToParent={handleDataFromChild} company={stock.company} name={stock.name} price={stock.price} change={stock.change} iffave={flag}></StockCard_stockpage>
+
+                return <StockCard_stockpage  currency={stock.currency} sendDataToParent={handleDataFromChild} company={stock.company} name={stock.name} price={stock.price} change={stock.change} iffave={flag}></StockCard_stockpage>
             });;
         } else if(sort==="price"){
             return array.sort((a:any,b:any)=>a.price-b.price).filter(function compare(x:any){return x.company.toLowerCase().includes(searchQuery)}).map((stock:any)=>{
-                return <StockCard_stockpage sendDataToParent={handleDataFromChild} company={stock.company} name={stock.name} price={stock.price} change={stock.change} iffave={flag}></StockCard_stockpage>
+                return <StockCard_stockpage  currency={stock.currency} sendDataToParent={handleDataFromChild} company={stock.company} name={stock.name} price={stock.price} change={stock.change} iffave={flag}></StockCard_stockpage>
             });
         } else if(sort==="change"){
             return array.sort((a:any,b:any)=>a.change-b.change).filter(function compare(x:any){return x.company.toLowerCase().includes(searchQuery)}).map((stock:any)=>{
-                return <StockCard_stockpage sendDataToParent={handleDataFromChild} company={stock.company} name={stock.name} price={stock.price} change={stock.change} iffave={flag}></StockCard_stockpage>
+                return <StockCard_stockpage  currency={stock.currency} sendDataToParent={handleDataFromChild} company={stock.company} name={stock.name} price={stock.price} change={stock.change} iffave={flag}></StockCard_stockpage>
             });
         } else {
             return array.sort((a:any,b:any)=>a.company.localeCompare(b.company)).filter(function compare(x:any){return x.company.toLowerCase().includes(searchQuery)}).map((stock:any)=>{
-                return <StockCard_stockpage sendDataToParent={handleDataFromChild} company={stock.company} name={stock.name} price={stock.price} change={stock.change} iffave={flag}></StockCard_stockpage>
+                return <StockCard_stockpage  currency={stock.currency} sendDataToParent={handleDataFromChild} company={stock.company} name={stock.name} price={stock.price} change={stock.change} iffave={flag}></StockCard_stockpage>
             });
         }
     }

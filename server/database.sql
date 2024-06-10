@@ -23,7 +23,8 @@ CREATE TABLE holdings (
     FOREIGN KEY(portfolio_id) REFERENCES portfolios(portfolio_id),
     stock_ticker VARCHAR(50),
     number_of_shares DECIMAL(5,2),
-    avg_purchase_price DECIMAL(5,2)
+    avg_purchase_price DECIMAL(5,2),
+    industry VARCHAR(255)
 );
 CREATE TABLE transactions (
     transaction_id SERIAL NOT NULL PRIMARY KEY,

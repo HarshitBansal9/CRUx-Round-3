@@ -1,6 +1,7 @@
 import { Heart } from "lucide-react";
 import { Minus } from "lucide-react";
 import { Link } from "react-router-dom";
+import currencies from "../../currencies";
 import axios from "axios";
 interface IPROPS{
   company:string;
@@ -8,9 +9,10 @@ interface IPROPS{
   price: number;
   change: number;
   iffave:boolean;
+  currency:string;
   sendDataToParent: (data:any)=>void;
 }
-function StockCard_stockpage({company,name, price, change,sendDataToParent,iffave}:IPROPS) {
+function StockCard_stockpage({company,name, price, change,sendDataToParent,iffave,currency}:IPROPS) {
   function handleClick(flag:boolean) {
     sendDataToParent({
       company,
@@ -43,7 +45,7 @@ function StockCard_stockpage({company,name, price, change,sendDataToParent,iffav
         </div>
         <div className="h-[80px] w-full flex items-center">
           <div className="ml-4 mt-6 w-[200px]">
-              <div className="text-2xl text-black font-bold">${price.toFixed(2)}</div>
+              <div className="text-2xl text-black font-bold">{currencies[currency as string]}{price.toFixed(2)}</div>
               <div className="text-gray-500 text-sm">Last Traded Price</div>
           </div>
         </div>
