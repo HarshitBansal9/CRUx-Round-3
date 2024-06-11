@@ -24,7 +24,7 @@ passport.use(new GoogleStrategy({
     if (flag) {
       return;
     }
-    const newUser = await pool.query("INSERT INTO users (id,username,favourite) VALUES ($1,$2,$3,$4) RETURNING *", [profile.id, profile.displayName, [],profile.photos[0].value]);
+    const newUser = await pool.query("INSERT INTO users (id,username,favourite,photo) VALUES ($1,$2,$3,$4) RETURNING *", [profile.id, profile.displayName, [],profile.photos[0].value]);
     await pool.query("INSERT INTO portfolios (available_amount,id,status) VALUES ($1,$2,$3) RETURNING *", [0, profile.id,"private"]);
     done(null, profile)
   }

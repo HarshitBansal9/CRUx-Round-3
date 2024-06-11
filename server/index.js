@@ -24,11 +24,7 @@ app.use(express.urlencoded());
 app.use(passport.initialize());
 app.use(passport.session());
 
-app.use(cors({
-    origin: "http://localhost:5173",
-    methods: "GET,PUT,POST,DELETE",
-    credentials: true,
-}))
+app.use(cors());
 
 
 // when we are on auth url ,automatically calls auth route
