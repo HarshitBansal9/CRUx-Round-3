@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 interface IPROPS{
     company:string;
     name: string;
@@ -10,7 +11,7 @@ function StockCard({company,name, price, change}:IPROPS) {
       <div className="h-[90px] w-full flex items-center">
         <div className="lg:ml-8 ml-4 w-[240px]">
             <div className="text-xl dark:text-gray-200">{company}</div>
-            <div className="text-gray-400 text-md">{name}</div>
+            <Link to={`/stocks/${name}`}><div className="text-gray-400 text-md">{name}</div></Link>
         </div>
         {
         change < 0 ? 
@@ -25,7 +26,7 @@ function StockCard({company,name, price, change}:IPROPS) {
         </div>
       </div>
       <div className="h-[90px] w-full flex items-center">
-        <div className="h-[40px] w-[100px] border-[1px] flex ml-6 border-gray-400 mb-6 rounded-md hover:cursor-pointer dark:bg-gray-200 dark:text-black font-bold items-center justify-center text-gray-500">Trade</div>
+        <Link to={`/stocks/${name}`}><div className="h-[40px] w-[100px] border-[1px] flex ml-6 border-gray-400 mb-6 rounded-md hover:cursor-pointer dark:bg-gray-200 dark:text-black font-bold items-center justify-center text-gray-500">Trade</div></Link>
       </div>
     </div>
   ) 
