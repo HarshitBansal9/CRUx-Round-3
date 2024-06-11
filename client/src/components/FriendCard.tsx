@@ -23,11 +23,11 @@ function FriendCard({name, totalUnrealizedGain, stock1name, stock1value, stock2n
                     <h2 className="font-bold dark:text-gray-200 ">Top Holdings:</h2>
                     <div className="flex flex-row gap-5">
                         <span className="text-gray-700 dark:text-gray-200 font-medium">1.{stock1name}</span>
-                        <span className="text-gray-700 font-medium dark:text-gray-200 flex flex-row gap-5">Gain/Loss: <div className={`${getPriceColor(stock1value)}`}>${stock1value.toFixed(2)}</div></span>
+                        <span className="text-gray-700 font-medium dark:text-gray-200 flex flex-row gap-5">Gain/Loss: <div className={`${getPriceColor(stock1value)}`}>${stock1value?.toFixed(2)}</div></span>
                     </div>
                     <div className="flex flex-row gap-5">
                         <span className="text-gray-700 dark:text-gray-200 font-medium">2.{stock2name}</span>
-                        <span className="text-gray-700 font-medium dark:text-gray-200 flex flex-row gap-5">Gain/Loss: <div className={`${getPriceColor(stock2value)}`}>${stock2value.toFixed(2)}</div></span>
+                        <span className="text-gray-700 font-medium dark:text-gray-200 flex flex-row gap-5">Gain/Loss: <div className={`${getPriceColor(stock2value)}`}>${stock2value?.toFixed(2)}</div></span>
                     </div>
                 </div>
             </div>
