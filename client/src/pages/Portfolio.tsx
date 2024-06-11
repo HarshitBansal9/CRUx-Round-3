@@ -4,9 +4,8 @@ import Holding, { getPriceColor } from "../components/Holding";
 import { ListOrdered } from "lucide-react";
 import { Menu, MenuButton, MenuItem, MenuItems,Transition } from '@headlessui/react'
 import { ResponsivePie } from '@nivo/pie'
-import dotenv from 'dotenv';
-dotenv.config();
-const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
+import config from "../config";
+
 function Portfolio() {
     const [availableAmt,setAvailableAmt] = useState<number>(0);
     const [addAmt,setAddAmt] = useState<number>(0);
@@ -17,12 +16,12 @@ function Portfolio() {
     const [totalValue,setTotalValue] = useState<number>(0);
     useEffect(()=>{
         async function getAmt(){
-            const response  = await axios.get(`${BACKEND_URL}/portfolio/available_amount`,{withCredentials:true});
+            const response  = await axios.get(`${config.BACKEND_URL}/portfolio/available_amount`,{withCredentials:true});
             setAvailableAmt(response.data.available_amount);
         }
         getAmt();
         async function getHoldings(){
-            const response = await axios.get(`${BACKEND_URL}/portfolio/get_holdings`,{withCredentials:true});
+            const response = await axios.get(`${config.BACKEND_URL}/portfolio/get_holdings`,{withCredentials:true});
             let sum1 = 0;
             for (let i = 0;i<response.data.length;i++){
                 sum1+=Number(response.data[i].value);
@@ -49,12 +48,12 @@ function Portfolio() {
         }
         getHoldings();
         async function getStatus(){
-            const response = await axios.get(`${BACKEND_URL}/portfolio/get_status`,{withCredentials:true});
+            const response = await axios.get(`${config.BACKEND_URL}/portfolio/get_status`,{withCredentials:true});
             setCurrStatus(response.data.status);
         }
         getStatus();
         async function getOtherUserData() {
-            const response = await axios.get(`${BACKEND_URL}/portfolio/get_other_user_data`,{withCredentials:true});
+            const response = await axios.get(`${config.BACKEND_URL}/portfolio/get_other_user_data`,{withCredentials:true});
             console.log(response.data);      
         };
         getOtherUserData();
@@ -77,7 +76,7 @@ function Portfolio() {
                                 status = "private";
                                 setCurrStatus("private");
                             }
-                            await axios.get(`${BACKEND_URL}/portfolio/change_status`,{params:{status:status},withCredentials:true});
+                            await axios.get(`${config.BACKEND_URL}/portfolio/change_status`,{params:{status:status},withCredentials:true});
                         }} className="border-[1px] p-2 rounded-lg dark:bg-gray-400 dark:border-none hover:bg-white bg-gray-100 hover:cursor-pointer">Change Status</div>        
                         <div>
                             <Menu>
@@ -126,7 +125,7 @@ function Portfolio() {
                             <div onClick={async ()=>{
                                 let x = Number(availableAmt)+Number(addAmt);
                                 setAvailableAmt(x);
-                                await axios.get(`${BACKEND_URL}/portfolio/add_amount`,{withCredentials:true,params:{amount:addAmt}});
+                                await axios.get(`${config.BACKEND_URL}/portfolio/add_amount`,{withCredentials:true,params:{amount:addAmt}});
                             }} className="border-[1px] w-[60px] flex justify-center hover:cursor-pointer hover:bg-white dark:bg-gray-200 items-center rounded-lg bg-gray-100 h-[35px]">Add</div> 
                         </div>
                         <div className="flex items-center gap-2">

@@ -1,9 +1,8 @@
-import dotenv from 'dotenv';
-dotenv.config();
-const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
+import config from "../config";
+
 function Login() {
   const google = () => {
-    window.open(`${BACKEND_URL}/auth/google`,"_self"); 
+    window.open(`${config.BACKEND_URL}/auth/google`,"_self"); 
   }
   return (
     <div className="flex min-h-[100dvh] items-center justify-center bg-gray-100 px-4 dark:bg-custom-background">

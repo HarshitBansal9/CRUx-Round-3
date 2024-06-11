@@ -7,14 +7,13 @@ import Portfolio from './pages/Portfolio';
 import Friends from './pages/Friends';
 import Details from './pages/Details';
 import { useEffect,useState } from 'react';
-import dotenv from 'dotenv';
-dotenv.config();
-const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
+import config from './config';
+
 const App = () =>{
   const [user,setUser] = useState(null);
   useEffect(()=>{
     const getUser =  async ()=>{
-      await fetch(`${BACKEND_URL}/auth/login/success`,{
+      await fetch(`${config.BACKEND_URL}/auth/login/success`,{
         method:"GET",
         credentials:"include",
         headers:{

@@ -4,21 +4,20 @@ import { useEffect, useState } from 'react';
 import { useDebounce } from './hooks';
 import { Combobox,ComboboxInput,ComboboxOptions,ComboboxOption} from '@headlessui/react';
 import axios from 'axios';
-import dotenv from 'dotenv';
-dotenv.config();
-const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
+import config from '../config';
+
 const Navbar = ({user}:any) => {
   const [search,setSearch] = useState<string>("");
   const debouncedSearch = useDebounce(search,500);
   const [stocks,setStocks] = useState<any>([]);
   const Logout = ()=>{
-    window.open(`${BACKEND_URL}/auth/logout`,"_self")
+    window.open(`${config.BACKEND_URL}/auth/logout`,"_self")
   };
   let navigate = useNavigate();
   useEffect(()=>{
     const loadStocks = async ()=>{
       console.log(search);
-      const response = await axios.get(`${BACKEND_URL}/stock/search`,{params:{name:debouncedSearch}});
+      const response = await axios.get(`${config.BACKEND_URL}/stock/search`,{params:{name:debouncedSearch}});
       setStocks(response.data.quotes);
     };
     if (debouncedSearch.length === 0) return;

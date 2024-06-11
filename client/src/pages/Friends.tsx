@@ -1,14 +1,13 @@
 import { useEffect,useState } from 'react'
 import axios from 'axios'
 import FriendCard from '../components/FriendCard';
-import dotenv from 'dotenv';
-dotenv.config();
-const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
+import config from '../config';
+
 function Friends() {
     const [userData,setUserData] = useState([]);
     useEffect(()=>{
         async function getOtherUserData() {
-            const response = await axios.get(`${BACKEND_URL}/get_other_user_data`,{withCredentials:true});
+            const response = await axios.get(`${config.BACKEND_URL}/get_other_user_data`,{withCredentials:true});
             console.log(response.data);
             setUserData(response.data);     
         };

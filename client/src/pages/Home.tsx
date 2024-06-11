@@ -2,14 +2,13 @@ import {Link} from 'react-router-dom';
 import StockCard from '../components/StockCard';
 import { useEffect,useState } from 'react';
 import axios from 'axios';
-import dotenv from 'dotenv';
-dotenv.config();
-const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
+import config from '../config';
+
 function Home({user}:any) {
   const [stocks,setStocks] = useState([]);
   useEffect(()=>{
     async function getStocks(){
-      const response = await axios.get(`${BACKEND_URL}/stock/getstocks`,{withCredentials:true});
+      const response = await axios.get(`${config.BACKEND_URL}/stock/getstocks`,{withCredentials:true});
       setStocks(response.data.slice(0,3));
     }
     getStocks();
