@@ -2,7 +2,9 @@ import { ListOrdered } from "lucide-react"
 import { useState,useEffect } from "react";
 import { Menu, MenuButton, MenuItem, MenuItems,Transition } from '@headlessui/react'
 import axios from "axios";
-
+import dotenv from 'dotenv';
+dotenv.config();
+const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
 import StockCard_stockpage from "../components/StockCard_stockpage";
 function Stocks() {
     const [favouriteStocks,setFavouriteStocks] = useState<any>([]);
@@ -46,7 +48,7 @@ function Stocks() {
     }
     useEffect(()=>{ 
         async function getFavStocks(array:any){
-            const response = await axios.get("http://localhost:5000/stock/getfavourite",{withCredentials:true});
+            const response = await axios.get(`${BACKEND_URL}/stock/getfavourite`,{withCredentials:true});
             let array1 = [];
             let array2 = [];
             for (let i = 0 ;i<array.length;i++){
@@ -60,7 +62,7 @@ function Stocks() {
             setPopStocks(array2);
         }
       async function getStocks(){
-        const response = await axios.get("http://localhost:5000/stock/getstocks",{withCredentials:true});
+        const response = await axios.get(`${BACKEND_URL}/stock/getstocks`,{withCredentials:true});
         getFavStocks(response.data);
       } 
       getStocks();

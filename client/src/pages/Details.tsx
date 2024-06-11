@@ -6,6 +6,9 @@ import axios from "axios";
 import currencies from "../../currencies";
 import { ChevronDown } from "lucide-react";
 import { Menu, MenuButton, MenuItem, MenuItems,Transition } from '@headlessui/react';
+import dotenv from 'dotenv';
+dotenv.config();
+const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
 function Details() {
     const location:any = useLocation()
     const [history,setHistory] = useState<any>([]);
@@ -33,7 +36,7 @@ function Details() {
 
     useEffect(()=>{
         async function getStocks(){     
-            await axios.get("http://localhost:5000/stock/gethistory",{params:{name:path}}).then((res)=>{
+            await axios.get(`${BACKEND_URL}/stock/gethistory`,{params:{name:path}}).then((res)=>{
                 console.log(res.data);
                 setHistory(res.data);
                 setCurrChoice('1Y');
@@ -42,15 +45,15 @@ function Details() {
             })
         }
         async function getAmt(){
-            const response  = await axios.get("http://localhost:5000/portfolio/available_amount",{withCredentials:true});
+            const response  = await axios.get(`${BACKEND_URL}/portfolio/available_amount`,{withCredentials:true});
             setAvailableAmt(response.data.available_amount);
         }
         async function getHoldings(){
-            const response = await axios.get("http://localhost:5000/portfolio/get_holdings",{withCredentials:true});
+            const response = await axios.get(`${BACKEND_URL}/portfolio/get_holdings`,{withCredentials:true});
             setHoldings(response.data);
         }
         async function getDetails(){
-            const response = await axios.get("http://localhost:5000/stock/stockdetails",{params:{name:path}});
+            const response = await axios.get(`${BACKEND_URL}/stock/stockdetails`,{params:{name:path}});
             let test = response.data;
             test.currency = test.currency.toUpperCase();
             setStockDetails(test);
@@ -231,7 +234,7 @@ function Details() {
                                         return;
                                     }
                                     alert("Transaction successful");
-                                    await axios.get("http://localhost:5000/portfolio/buy",{params:{stock_ticker:path,number_of_shares:buyShares,avg_purchase_price:Number(stockDetails.regularMarketPrice),transaction_type:"BUY"},withCredentials:true});
+                                    await axios.get(`${BACKEND_URL}/portfolio/buy`,{params:{stock_ticker:path,number_of_shares:buyShares,avg_purchase_price:Number(stockDetails.regularMarketPrice),transaction_type:"BUY"},withCredentials:true});
                                 }} className="border-[1px] rounded-lg w-[100px] h-[40px] flex justify-center items-center text-white bg-gray-800 hover:bg-gray-600 hover:cursor-pointer dark:bg-custom-background dark:border-black dark:hover:bg-licorice">BUY</div>
                             </div>
                         </div>
@@ -250,7 +253,7 @@ function Details() {
                                         alert("Insufficient shares");
                                         return;
                                     }
-                                    await axios.get("http://localhost:5000/portfolio/sell",{params:{stock_ticker:path,number_of_shares:sellShares,avg_purchase_price:Number(stockDetails.regularMarketPrice),transaction_type:"SELL"},withCredentials:true});
+                                    await axios.get(`${BACKEND_URL}/portfolio/sell`,{params:{stock_ticker:path,number_of_shares:sellShares,avg_purchase_price:Number(stockDetails.regularMarketPrice),transaction_type:"SELL"},withCredentials:true});
                                     alert("Transaction successful");
                                 }} className="border-[1px] rounded-lg w-[100px] h-[40px] flex justify-center items-center text-white bg-gray-800 hover:bg-gray-600 hover:cursor-pointer dark:bg-custom-background dark:border-black dark:hover:bg-licorice">SELL</div>
                             </div>

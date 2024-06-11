@@ -22,6 +22,7 @@
     "anychart-react": "^1.4.1",
     "axios": "^1.7.2",
     "connect-pg-simple": "^9.0.1",
+    "dotenv": "^16.4.5",
     "dropdown-menu": "^0.1.1",
     "lucide-react": "^0.381.0",
     "react": "^18.2.0",
@@ -30,6 +31,7 @@
     "shadcn-ui": "^0.8.0"
   },
   "devDependencies": {
+    "@types/node": "^20.14.2",
     "@types/react": "^18.2.66",
     "@types/react-dom": "^18.2.22",
     "@typescript-eslint/eslint-plugin": "^7.2.0",
