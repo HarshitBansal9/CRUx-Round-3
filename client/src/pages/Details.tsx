@@ -4,7 +4,7 @@ import { Line } from '@nivo/line';
 import { linearGradientDef } from '@nivo/core';
 import axios from "axios";
 import currencies from "../../currencies";
-import { ArrowDown, ChevronDown } from "lucide-react";
+import { ChevronDown } from "lucide-react";
 import { Menu, MenuButton, MenuItem, MenuItems,Transition } from '@headlessui/react';
 function Details() {
     const location:any = useLocation()

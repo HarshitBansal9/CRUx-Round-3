@@ -3,7 +3,6 @@ import axios from "axios";
 import Holding, { getPriceColor } from "../components/Holding";
 import { ListOrdered } from "lucide-react";
 import { Menu, MenuButton, MenuItem, MenuItems,Transition } from '@headlessui/react'
-import { Link } from "react-router-dom";
 import { ResponsivePie } from '@nivo/pie'
 function Portfolio() {
     const [availableAmt,setAvailableAmt] = useState<number>(0);
