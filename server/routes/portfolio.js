@@ -74,16 +74,16 @@ router.get('/get_other_user_data', async (req, res) => {
             let photo = data[i].photo;
             let user = data[i].username;
             let totalUnrealizedGain = 0;
-            let topStocks = [];
+            let topTwoStocks = [];
             for (let j = 0; j < data.length; j++) {
                 if (data[j].username === user) {
                     totalUnrealizedGain += data[j].currentPrice * data[j].number_of_shares - data[j].cost_price;
-                    topStocks.push({stock_ticker:data[j].stock_ticker,unrealizedGain:data[j].currentPrice * data[j].number_of_shares - data[j].cost_price});
+                    topTwoStocks.push({stock_ticker:data[j].stock_ticker,unrealizedGain:data[j].currentPrice * data[j].number_of_shares - data[j].cost_price});
                 }
             }
-            topStocks.sort((a,b) => b.unrealizedGain - a.unrealizedGain);
-            topStocks = topStocks[0];
-            other_user_data.push({id,photo,user,totalUnrealizedGain,topStocks});
+            topTwoStocks.sort((a,b) => b.unrealizedGain - a.unrealizedGain);
+            topTwoStocks = topTwoStocks.slice(0,2);
+            other_user_data.push({id,photo,user,totalUnrealizedGain,topTwoStocks});
         }
     }
     res.send(other_user_data);
