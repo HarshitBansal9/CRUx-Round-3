@@ -6,16 +6,13 @@ const GOOGLE_CLIENT_ID = process.env.GOOGLE_CLIENT_ID;
 const GOOGLE_CLIENT_SECRET = process.env.GOOGLE_CLIENT_SECRET;
 const pool = require("./db.ts");
 
-console.log(GOOGLE_CLIENT_ID, GOOGLE_CLIENT_SECRET);
 passport.use(new GoogleStrategy({
   clientID: GOOGLE_CLIENT_ID,
   clientSecret: GOOGLE_CLIENT_SECRET,
   callbackURL: "http://localhost:5000/auth/google/callback"
 },
   async function (accessToken, refreshToken, profile, /*cb*/done) {
-    /* User.findOrCreate({ googleId: profile.id }, function (err, user) {
-      return cb(err, user);
-    }); */
+    console.log(profile);
     const user = await pool.query("SELECT * FROM users");
     let flag = false;
     for (let i = 0; i < user.rows.length; i++) {
@@ -27,8 +24,8 @@ passport.use(new GoogleStrategy({
     if (flag) {
       return;
     }
-    const newUser = await pool.query("INSERT INTO users (id,username,favourite) VALUES ($1,$2,$3) RETURNING *", [profile.id, profile.displayName, []]);
-    await pool.query("INSERT INTO portfolios (available_amount,id) VALUES ($1,$2) RETURNING *", [0, profile.id]);
+    const newUser = await pool.query("INSERT INTO users (id,username,favourite) VALUES ($1,$2,$3,$4) RETURNING *", [profile.id, profile.displayName, [],profile.photos[0].value]);
+    await pool.query("INSERT INTO portfolios (available_amount,id,status) VALUES ($1,$2,$3) RETURNING *", [0, profile.id,"private"]);
     done(null, profile)
   }
 ));

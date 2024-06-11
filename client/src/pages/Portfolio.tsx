@@ -10,11 +10,9 @@ function Portfolio() {
     const [addAmt,setAddAmt] = useState<number>(0);
     const [holdings,setHoldings] = useState<any>([]);
     const [sort,setSort] = useState<string>("currentPrice");
+    const [currStatus,setCurrStatus] = useState<string>("");
     const [sectorData,setSectorData] = useState<any>([]);
     const [totalValue,setTotalValue] = useState<number>(0);
-    function displayHoldings(){
-        return holdings.sort((a:any,b:any)=>Number(a[sort])-Number(b[sort])).map((holding:any)=><Holding key={holding.stock_ticker} {...holding} />);
-    }
     useEffect(()=>{
         async function getAmt(){
             const response  = await axios.get("http://localhost:5000/portfolio/available_amount",{withCredentials:true});
@@ -48,58 +46,66 @@ function Portfolio() {
             setHoldings(response.data);
         }
         getHoldings();
+        async function getStatus(){
+            const response = await axios.get("http://localhost:5000/portfolio/get_status",{withCredentials:true});
+            setCurrStatus(response.data.status);
+        }
+        getStatus();
+        async function getOtherUserData() {
+            const response = await axios.get("http://localhost:5000/portfolio/get_other_user_data",{withCredentials:true});
+            console.log(response.data);      
+        };
+        getOtherUserData();
     },[]);
     const unrealizedGainSum = holdings.reduce((acc:any,holding:any)=>acc+holding.unrealizedGain,0).toFixed(2);
     return (
         <div>
-            <main className="flex-1 bg-gray-100 p-4 md:p-8">
-                <div className="container max-w-5xl mx-auto grid gap-8">
+            <main className="flex-1 bg-gray-100 p-4 md:p-8 dark:bg-custom-background">
+                <div className="container max-w-6xl dark:bg-licorice mx-auto grid gap-8">
                 <div className="grid gap-4">
-                    <div className="bg-white rounded-lg shadow-sm p-4 md:p-6">
+                    <div className="bg-white dark:bg-licorice rounded-lg shadow-sm p-4 md:p-6">
                     <div className="flex items-center justify-between mb-4">
-                        <h2 className="text-lg font-semibold">Portfolio</h2>        
-                        <div className="w-[300px] h-full items-center flex-row flex justify-evenly">
-                            <input onChange={(e)=>{
-                                if (parseInt(e.target.value) < 0){
-                                    alert("Please enter a positive number");
-                                    return;
-                                }
-                                setAddAmt(parseInt(e.target.value))}} type="Number" min="0" placeholder="Add amount..." className="w-[150px] absol max-w-xs rounded-lg border-gray-300 bg-gray-100 px-4 py-2 text-sm border-[1px] focus:border-gray-500 focus:outline-none "/>
-                            <div onClick={async ()=>{
-                                let x = Number(availableAmt)+Number(addAmt);
-                                setAvailableAmt(x);
-                                await axios.get("http://localhost:5000/portfolio/add_amount",{withCredentials:true,params:{amount:addAmt}});
-                            }} className="border-[1px] w-[60px] flex justify-center hover:cursor-pointer hover:bg-white items-center rounded-lg bg-gray-100 h-[35px]">Add</div> 
-                        </div>
+                        <h2 className="text-lg dark:text-gray-200 font-semibold">Portfolio</h2>
+                        <div onClick = { async ()=>{
+                            let status = currStatus;
+                            if (currStatus==="private"){
+                                status = "public";
+                                setCurrStatus("public");
+                            } else {
+                                status = "private";
+                                setCurrStatus("private");
+                            }
+                            await axios.get("http://localhost:5000/portfolio/change_status",{params:{status:status},withCredentials:true});
+                        }} className="border-[1px] p-2 rounded-lg dark:bg-gray-400 dark:border-none hover:bg-white bg-gray-100 hover:cursor-pointer">Change Status</div>        
                         <div>
                             <Menu>
-                                <MenuButton className="border-[1px] w-[100px] h-[40px] rounded-md flex flex-row justify-evenly items-center"><ListOrdered size={18}></ListOrdered><div className="text-sm">Sort by</div></MenuButton>
+                                <MenuButton className="border-[1px] dark:bg-gray-400 dark:border-none w-[100px] h-[40px] rounded-md flex flex-row justify-evenly items-center"><ListOrdered size={18}></ListOrdered><div className="text-sm">Sort by</div></MenuButton>
                                 <Transition enter="transition ease-out duration-75" enterFrom="opacity-0 scale-95" enterTo="opacity-100 scale-100" leave="transition ease-in duration-100" leaveFrom="opacity-100 scale-100" leaveTo="opacity-0 scale-95">
-                                    <MenuItems className="h-[162px] w-[100px] bg-white border-[1px] hover:cursor-pointer" anchor="bottom">
+                                    <MenuItems className="h-[162px] dark:bg-gray-200 w-[100px] bg-white border-[1px] hover:cursor-pointer" anchor="bottom">
                                         <MenuItem>
                                         <div onClick={()=>{setSort("currentPrice")}} className="hover:bg-gray-200">
-                                        <a className="flex justify-center items-center p-2">
+                                        <a className="flex justify-center dark:hover:bg-white items-center p-2">
                                             Default
                                         </a>
                                         </div>
                                         </MenuItem>
                                         <MenuItem>
                                         <div onClick={()=>{setSort("currentPrice")}} className="hover:bg-gray-200">
-                                        <a className="flex justify-center items-center p-2">
+                                        <a className="flex justify-center dark:hover:bg-white items-center p-2">
                                             Price
                                         </a>
                                         </div>
                                         </MenuItem>
                                         <MenuItem>
                                         <div onClick={()=>{setSort("value")}} className="hover:bg-gray-200">
-                                        <a className="flex justify-center items-center p-2">
+                                        <a className="flex justify-center dark:hover:bg-white items-center p-2">
                                             Value
                                         </a>
                                         </div>
                                         </MenuItem>
                                         <MenuItem>
                                         <div onClick={()=>{setSort("number_of_shares")}} className="hover:bg-gray-200">
-                                        <a className="flex justify-center items-center p-2">
+                                        <a className="flex justify-center dark:hover:bg-white items-center p-2">
                                             Shares 
                                         </a>
                                         </div>
@@ -108,33 +114,46 @@ function Portfolio() {
                                 </Transition>
                             </Menu>
                         </div>
+                        <div className="w-[300px] h-full items-center flex-row flex justify-evenly">
+                            <input onChange={(e)=>{
+                                if (parseInt(e.target.value) < 0){
+                                    alert("Please enter a positive number");
+                                    return;
+                                }
+                                setAddAmt(parseInt(e.target.value))}} type="Number" min="0" placeholder="Add amount..." className="w-[150px] dark:bg-gray-200 absol max-w-xs rounded-lg border-gray-300 bg-gray-100 px-4 py-2 text-sm border-[1px] focus:border-gray-500 focus:outline-none "/>
+                            <div onClick={async ()=>{
+                                let x = Number(availableAmt)+Number(addAmt);
+                                setAvailableAmt(x);
+                                await axios.get("http://localhost:5000/portfolio/add_amount",{withCredentials:true,params:{amount:addAmt}});
+                            }} className="border-[1px] w-[60px] flex justify-center hover:cursor-pointer hover:bg-white dark:bg-gray-200 items-center rounded-lg bg-gray-100 h-[35px]">Add</div> 
+                        </div>
                         <div className="flex items-center gap-2">
-                        <span className="text-sm text-gray-500">Total Value</span>
-                        <div className="text-lg font-bold">${totalValue.toFixed(2)}</div>
+                        <span className="text-sm text-gray-500 dark:text-gray-200">Total Value</span>
+                        <div className="text-lg font-bold dark:text-white">${totalValue.toFixed(2)}</div>
                         </div>
                     </div>
                     <div className="overflow-x-auto">
                         <table className="w-full text-sm text-left">
-                        <thead className="bg-gray-100 text-gray-500">
+                        <thead className="bg-gray-100 dark:bg-licorice text-gray-500">
                             <tr>
-                                <th className="py-3 px-4">Stock</th>
-                                <th className="py-3 px-4">Shares</th>
-                                <th className="py-3 px-4">Price</th>
-                                <th className="py-3 px-4">Value</th>
-                                <th className="py-3 ">Unrealized Gain/Loss</th>
+                                <th className="py-3 px-4 dark:text-gray-200">Stock</th>
+                                <th className="py-3 px-4 dark:text-gray-200">Shares</th>
+                                <th className="py-3 px-4 dark:text-gray-200">Price</th>
+                                <th className="py-3 px-4 dark:text-gray-200">Value</th>
+                                <th className="py-3  dark:text-gray-200">Unrealized Gain/Loss</th>
                             </tr>
                         </thead>
                         <tbody>
-                            {displayHoldings()}
+                            {holdings.sort((a:any,b:any)=>Number(b[sort])-Number(a[sort])).map((holding:any)=><Holding key={holding.stock_ticker} {...holding} />)}
                         </tbody>
                         </table>
                     </div>
                     </div>
                     </div>
                 </div>
-                <div className="bg-white max-w-5xl mx-auto mt-10 rounded-lg shadow-sm p-4 md:p-6 grid gap-4">
+                <div className="bg-white max-w-6xl dark:bg-licorice mx-auto mt-10 rounded-lg shadow-sm p-4 md:p-6 grid gap-4">
                     <div className="flex items-center justify-between">
-                        <h2 className="text-lg font-semibold">Portfolio Summary</h2>
+                        <h2 className="text-lg dark:text-gray-200 font-semibold">Portfolio Summary</h2>
                     </div>
                     <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
                         <div className="bg-gray-100 rounded-lg p-4">
@@ -150,16 +169,17 @@ function Portfolio() {
                             <div className="text-lg font-bold">${availableAmt}</div>
                         </div>
                         <div className="bg-gray-100 rounded-lg p-4">
-                            <div className="text-sm text-gray-500">Margin</div>
-                            <div className="text-lg font-bold">$</div>
+                            <div className="text-sm text-gray-500">Current Status</div>
+                            <div className="text-lg font-bold">{currStatus}</div>
                         </div>
                     </div>
                 </div>
-                <div className="bg-gray-100 max-w-5xl mx-auto mt-10 rounded-lggrid gap-4">
-                    <div className="w-1/2 bg-white rounded-lg p-4 md:p-6">
-                        <div className="font-bold text-xl">Sector Wise Holdings</div>
+                <div className="bg-gray-100 max-w-6xl dark:bg-custom-background mx-auto mt-10 rounded-lggrid gap-4">
+                    <div className="w-1/2 bg-white dark:bg-licorice rounded-lg p-4 md:p-6">
+                        <div className="font-bold text-xl dark:text-gray-200">Sector Wise Holdings</div>
                         <div className="h-[300px]">
                         <ResponsivePie
+                                
                                 data={sectorData}
                                 margin={{ top: 40, right: 80, bottom: 80, left: 80 }}
                                 innerRadius={0.5}
@@ -210,6 +230,9 @@ function Portfolio() {
                                         spacing: 10
                                     }
                                 ]}
+                                theme={{
+                                    "text":{"fill":"#919191","outlineColor":"transparent"}
+                                }}
                                 fill={[
                                     {
                                         match: {

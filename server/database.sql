@@ -8,12 +8,14 @@ CREATE TABLE users (
     id VARCHAR(255) PRIMARY KEY,
     username VARCHAR(255) NOT NULL,
     favourite VARCHAR(255) array[20]
+    photo VARCHAR(255),
 );
 
 
 CREATE TABLE portfolios (
     portfolio_id SERIAL NOT NULL PRIMARY KEY,
     available_amount DECIMAL(10,2),
+    status VARCHAR(255),
     id VARCHAR(255),
     FOREIGN KEY(id) REFERENCES users(id)
 );

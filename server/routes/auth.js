@@ -12,8 +12,7 @@ router.get("/login/failed", (req, res) => {
         message: "failed to login"
     })
 })
-router.get("/login/success", (req, res) => {
-    console.log(req.user);  
+router.get("/login/success", (req, res) => {  
     if (req.user) {
         req.session.user = req.user;
         res.status(200).json({

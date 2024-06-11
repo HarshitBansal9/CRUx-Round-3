@@ -3,7 +3,7 @@ function Login() {
     window.open("http://localhost:5000/auth/google","_self"); 
   }
   return (
-    <div className="flex min-h-[100dvh] items-center justify-center bg-gray-100 px-4 dark:bg-gray-950">
+    <div className="flex min-h-[100dvh] items-center justify-center bg-gray-100 px-4 dark:bg-custom-background">
       <div className="mx-auto max-w-md space-y-6">
         <div className="text-center">
           <h1 className="text-4xl font-bold tracking-tight text-gray-900 dark:text-gray-50">Welcome to Finance App</h1>
@@ -11,7 +11,7 @@ function Login() {
         </div>
         <button
           onClick={google}
-          className="flex w-full items-center justify-center gap-2 rounded-md border-gray-300 bg-white px-4 py-2 text-gray-900 shadow-sm transition-colors hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-gray-950 focus:ring-offset-2 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-50 dark:hover:bg-gray-700 dark:focus:ring-gray-300">
+          className="flex w-full items-center justify-center dark:bg-licorice gap-2 rounded-md border-gray-300 bg-white px-4 py-2 text-gray-900 shadow-sm transition-colors hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-gray-950 focus:ring-offset-2 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-50 dark:hover:bg-gray-700 dark:focus:ring-gray-300">
           <ChromeIcon className="h-6 w-6" />
           Sign in with Google
         </button>

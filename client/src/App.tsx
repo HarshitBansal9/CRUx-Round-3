@@ -4,6 +4,7 @@ import Home from './pages/Home';
 import Stocks from './pages/Stocks';
 import Login from './pages/Login';
 import Portfolio from './pages/Portfolio';
+import Friends from './pages/Friends';
 import Details from './pages/Details';
 import { useEffect,useState } from 'react';
 const App = () =>{
@@ -39,6 +40,7 @@ const App = () =>{
         <Route path="/" element={<Home user={user}/>} />
         <Route path = "/stocks" element = {<Stocks/>} />
         <Route path="/portfolio" element={<Portfolio/>} />
+        <Route path="/friends" element={<Friends/>} />
         <Route path="/stocks/:name" element={<Details/>} />
         <Route path="/login" element={user?<Navigate to="/"/>:<Login />} />
       </Routes>

@@ -62,47 +62,47 @@ function Stocks() {
       async function getStocks(){
         const response = await axios.get("http://localhost:5000/stock/getstocks",{withCredentials:true});
         getFavStocks(response.data);
-      }
+      } 
       getStocks();
     },[])
     return (
-        <div>
-            <div className="w-full h-[100px] flex items-center">
-                <div className="text-3xl font-bold absolute left-10">Stock Market Dashboard</div>
+        <div className="dark:bg-custom-background no-scrollbar lg:h-[1000px]">
+            <div className="w-full h-[100px] shadow-2xl dark:bg-licorice flex items-center">
+                <div className="text-3xl font-bold absolute  dark:text-gray-200 left-10">Stock Market Dashboard</div>
                 <div className="w-[400px] absolute right-[5px] flex-row flex justify-evenly">
                     <input type="text" onChange={
                         (e)=>{
                             setSearchQuery(e.target.value);
                         }
-                    } placeholder="Search stocks..." className="w-[150px] absol max-w-xs rounded-lg border-gray-300 bg-gray-100 px-4 py-2 text-sm border-[1px] focus:border-gray-500 focus:outline-none "/>
+                    } placeholder="Search stocks..." className="w-[150px] dark:bg-gray-400 dark:border-none dark:shadow-xl dark:text-black dark:placeholder-black absol max-w-xs rounded-lg border-gray-300 bg-gray-100 px-4 py-2 text-sm border-[1px] focus:border-gray-500 focus:outline-none "/>
                     <Menu>
-                        <MenuButton className="border-[1px] w-[100px] rounded-md flex flex-row justify-evenly items-center"><ListOrdered size={18}></ListOrdered><div className="text-sm">Sort by</div></MenuButton>
+                        <MenuButton className="border-[1px] w-[100px] rounded-md dark:bg-gray-400 dark:border-none dark:shadow-xl flex flex-row justify-evenly items-center"><ListOrdered size={18}></ListOrdered><div className="text-sm">Sort by</div></MenuButton>
                         <Transition enter="transition ease-out duration-75" enterFrom="opacity-0 scale-95" enterTo="opacity-100 scale-100" leave="transition ease-in duration-100" leaveFrom="opacity-100 scale-100" leaveTo="opacity-0 scale-95">
-                            <MenuItems className="h-[162px] w-[100px] bg-white border-[1px] hover:cursor-pointer" anchor="bottom">
+                            <MenuItems className="h-[162px] w-[100px] dark:border-black dark:bg-gray-400 bg-white border-[1px] hover:cursor-pointer" anchor="bottom">
                                 <MenuItem>
                                 <div onClick={()=>{setSort("default")}} className="hover:bg-gray-200">
-                                <a className="flex justify-center items-center p-2">
+                                <a className="flex justify-center dark:bg-gray-400 dark:hover:bg-gray-200  items-center p-2">
                                     Default
                                 </a>
                                 </div>
                                 </MenuItem>
                                 <MenuItem>
                                 <div onClick={()=>{setSort("price")}} className="hover:bg-gray-200">
-                                <a className="flex justify-center items-center p-2">
+                                <a className="flex justify-center dark:bg-gray-400 dark:hover:bg-gray-200  items-center p-2">
                                     Price
                                 </a>
                                 </div>
                                 </MenuItem>
                                 <MenuItem>
                                 <div onClick={()=>{setSort("change")}} className="hover:bg-gray-200">
-                                <a className="flex justify-center items-center p-2">
+                                <a className="flex justify-center dark:bg-gray-400 dark:hover:bg-gray-200  items-center p-2">
                                     Change
                                 </a>
                                 </div>
                                 </MenuItem>
                                 <MenuItem>
                                 <div onClick={()=>{setSort("company")}} className="hover:bg-gray-200">
-                                <a className="flex justify-center items-center p-2">
+                                <a className="flex justify-center dark:bg-gray-400 dark:hover:bg-gray-200  items-center p-2">
                                     Name
                                 </a>
                                 </div>
@@ -112,8 +112,8 @@ function Stocks() {
                     </Menu>   
                 </div>
             </div>
-            <div className="w-full flex flex-col mb-10 ml-10 mt-4">
-                <div className="text-2xl font-bold">Favourite Stocks</div>
+            <div className="flex flex-col pb-10 ml-10 mt-4">
+                <div className="text-2xl font-bold dark:text-gray-200">Favourite Stocks</div>
                 <div className="mt-2">
                     {
                         favouriteStocks.length === 0 ? 
@@ -126,9 +126,9 @@ function Stocks() {
                     }
                 </div>
             </div>
-            <div className="absolute w-full left-10">
+            <div className="absolute w-full pl-10 dark:bg-custom-background">
                 <div className="w-full flex flex-col">
-                    <div className="text-2xl font-bold text-red">Popular Stocks</div>
+                    <div className="text-2xl font-bold dark:text-gray-200">Popular Stocks</div>
                     <div className="grid grid-cols-4 m-0 mb-4 w-full">
                         {
                             displayStocks(popStocks)
