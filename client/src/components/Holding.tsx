@@ -22,7 +22,7 @@ function Holding({stock_ticker,number_of_shares, currentPrice,value,unrealizedGa
         <div className="text-right">${shares*price}</div>
     </div>*/
     <tr className="border-b">
-      <Link to={`../stocks/${stock_ticker}`}><td className="py-4 px-4 hover:underline font-medium">{stock_ticker}</td></Link>
+     <td className="py-4 px-4 hover:underline font-medium"> <Link to={`../stocks/${stock_ticker}`}>{stock_ticker}</Link></td>
       <td className="py-4 px-4">{number_of_shares}</td>
       <td className="py-4 px-4">${currentPrice}</td>
       <td className="py-4 px-4">${(value).toFixed(2)}</td>

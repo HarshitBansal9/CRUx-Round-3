@@ -12,9 +12,9 @@ function Portfolio() {
     const [sort,setSort] = useState<string>("currentPrice");
     const [sectorData,setSectorData] = useState<any>([]);
     const [totalValue,setTotalValue] = useState<number>(0);
-    useEffect(()=>{
-        setHoldings(holdings.sort((a:any,b:any)=>b[sort]-a[sort]));
-    },[sort])
+    function displayHoldings(){
+        return holdings.sort((a:any,b:any)=>Number(a[sort])-Number(b[sort])).map((holding:any)=><Holding key={holding.stock_ticker} {...holding} />);
+    }
     useEffect(()=>{
         async function getAmt(){
             const response  = await axios.get("http://localhost:5000/portfolio/available_amount",{withCredentials:true});
@@ -35,14 +35,12 @@ function Portfolio() {
                     if (data[j].id===response.data[i].industry){
                         flag = true;
                         data[j].value+=Number(response.data[i].value);
-                        console.log(data[j].value);
                         break;
                     }
                 }
                 if (flag) {
                     continue
                 };
-                //console.log(response.data[i].value.toFixed(2));
                 data.push({id:response.data[i].industry,value:Number(response.data[i].value)});
             }
             data = data.map((x:any)=>{return {id:x.id,label:x.id,value:x.value.toFixed(2)}});
@@ -127,7 +125,7 @@ function Portfolio() {
                             </tr>
                         </thead>
                         <tbody>
-                            {holdings.map((holding:any)=><Holding key={holding.stock_ticker} {...holding} />)}
+                            {displayHoldings()}
                         </tbody>
                         </table>
                     </div>
