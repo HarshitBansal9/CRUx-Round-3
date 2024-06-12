@@ -1,6 +1,6 @@
 const router = require('express').Router();
 const passport = require('passport');
-const CLIENT_URL = "http://localhost:5173/"
+const CLIENT_URL = "https://stocks.harshitb.me"
 
 router.get("/google", passport.authenticate('google', {
     scope: ['profile','email']

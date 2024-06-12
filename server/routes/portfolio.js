@@ -52,9 +52,20 @@ router.get('/get_other_user_data', async (req, res) => {
     console.log(data);
     const symbols = data.map(data => data.stock_ticker);
     let other_user_data = [];
+    console.log("Symbols",symbols)
     const quotes = await yahooFinance.quote(symbols);
+    const newQuotes=[]
+    for (let i = 0;i<symbols.length;i++) {
+        for (let j = 0;j<quotes.length;j++) {
+            if (symbols[i] === quotes[j].symbol) {
+                newQuotes.push(quotes[j]);
+                break;
+            }
+        }
+    }
+    console.log("newQuotes",newQuotes);
     data.forEach((holding,i) => {
-        holding.currentPrice = quotes[i].regularMarketPrice;
+        holding.currentPrice = newQuotes[i].regularMarketPrice;
         holding.unrealizedGain = holding.currentPrice * holding.number_of_shares - holding.cost_price;
     });
     console.log("data",data);
@@ -74,9 +85,10 @@ router.get('/get_other_user_data', async (req, res) => {
             let photo = data[i].photo;
             let user = data[i].username;
             let totalUnrealizedGain = 0;
-            let topTwoStocks = [];
+            let topTwoStocks = [];  
             for (let j = 0; j < data.length; j++) {
-                if (data[j].username === user) {
+                if (data[j].id === id) {
+                    //console.log("Current PRice",data[j].currentPrice,"Number of shares",data[j].number_of_shares,"Cost Price",data[j].cost_price)
                     totalUnrealizedGain += data[j].currentPrice * data[j].number_of_shares - data[j].cost_price;
                     topTwoStocks.push({stock_ticker:data[j].stock_ticker,unrealizedGain:data[j].currentPrice * data[j].number_of_shares - data[j].cost_price});
                 }

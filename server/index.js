@@ -24,7 +24,15 @@ app.use(express.urlencoded());
 app.use(passport.initialize());
 app.use(passport.session());
 
-app.use(cors());
+app.use(cors({
+  origin: ["http://localhost:5173","https://stocks.harshitb.me"],
+  cookies: {
+    secure:true,
+    domain:'.harshitb.me'
+  },
+  credentials: true,
+  methods: ["GET","POST"]
+}));
 
 
 // when we are on auth url ,automatically calls auth route

@@ -9,7 +9,7 @@ const pool = require("./db.ts");
 passport.use(new GoogleStrategy({
   clientID: GOOGLE_CLIENT_ID,
   clientSecret: GOOGLE_CLIENT_SECRET,
-  callbackURL: "http://localhost:5000/auth/google/callback"
+  callbackURL: "https://backend.harshitb.me/auth/google/callback"
 },
   async function (accessToken, refreshToken, profile, /*cb*/done) {
     console.log(profile);
