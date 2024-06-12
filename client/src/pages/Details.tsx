@@ -232,6 +232,7 @@ function Details() {
                                         alert("Insufficient funds");
                                         return;
                                     }
+                                    alert("Transaction Successful");
                                     const response = await axios.get(`${config.BACKEND_URL}/portfolio/buy`,{params:{stock_ticker:path,number_of_shares:buyShares,avg_purchase_price:Number(stockDetails.regularMarketPrice),transaction_type:"BUY"},withCredentials:true});
                                     if (response.data==="Transaction Successful"){
                                         alert("Transaction Successful");
@@ -254,6 +255,7 @@ function Details() {
                                         alert("Insufficient shares");
                                         return;
                                     }
+                                    alert("Transaction Successful");
                                     const response = await axios.get(`${config.BACKEND_URL}/portfolio/sell`,{params:{stock_ticker:path,number_of_shares:sellShares,avg_purchase_price:Number(stockDetails.regularMarketPrice),transaction_type:"SELL"},withCredentials:true});
                                     if (response.data==="Transaction Successful"){
                                         alert("Transaction Successful");
