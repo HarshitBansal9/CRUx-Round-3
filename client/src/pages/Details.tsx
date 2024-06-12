@@ -232,8 +232,10 @@ function Details() {
                                         alert("Insufficient funds");
                                         return;
                                     }
-                                    alert("Transaction successful");
-                                    await axios.get(`${config.BACKEND_URL}/portfolio/buy`,{params:{stock_ticker:path,number_of_shares:buyShares,avg_purchase_price:Number(stockDetails.regularMarketPrice),transaction_type:"BUY"},withCredentials:true});
+                                    const response = await axios.get(`${config.BACKEND_URL}/portfolio/buy`,{params:{stock_ticker:path,number_of_shares:buyShares,avg_purchase_price:Number(stockDetails.regularMarketPrice),transaction_type:"BUY"},withCredentials:true});
+                                    if (response.status === 200){
+                                        alert("Transaction successful");
+                                    }
                                 }} className="border-[1px] rounded-lg w-[100px] h-[40px] flex justify-center items-center text-white bg-gray-800 hover:bg-gray-600 hover:cursor-pointer dark:bg-custom-background dark:border-black dark:hover:bg-licorice">BUY</div>
                             </div>
                         </div>
@@ -252,8 +254,10 @@ function Details() {
                                         alert("Insufficient shares");
                                         return;
                                     }
-                                    await axios.get(`${config.BACKEND_URL}/portfolio/sell`,{params:{stock_ticker:path,number_of_shares:sellShares,avg_purchase_price:Number(stockDetails.regularMarketPrice),transaction_type:"SELL"},withCredentials:true});
-                                    alert("Transaction successful");
+                                    const response = await axios.get(`${config.BACKEND_URL}/portfolio/sell`,{params:{stock_ticker:path,number_of_shares:sellShares,avg_purchase_price:Number(stockDetails.regularMarketPrice),transaction_type:"SELL"},withCredentials:true});
+                                    if (response.status === 200){
+                                        alert("Transaction successful");
+                                    }
                                 }} className="border-[1px] rounded-lg w-[100px] h-[40px] flex justify-center items-center text-white bg-gray-800 hover:bg-gray-600 hover:cursor-pointer dark:bg-custom-background dark:border-black dark:hover:bg-licorice">SELL</div>
                             </div>
                         </div>

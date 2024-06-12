@@ -136,6 +136,7 @@ router.get('/buy', async (req, res) => {
     const currentDate = new Date().toISOString().split('T')[0];
     await pool.query("INSERT INTO transactions (portfolio_id,stock_ticker,number_of_shares,transaction_type,transaction_price,transaction_date) VALUES ($1,$2,$3,$4,$5,$6)", [portfolio_id.rows[0].portfolio_id, stock_ticker, number_of_shares, "BUY", avg_purchase_price * number_of_shares, currentDate]);
     await pool.query("Update portfolios SET available_amount = available_amount - $1 WHERE id = $2", [avg_purchase_price * number_of_shares, req.user.id]);
+    res.status(200).send("Transaction Successful");
 });
 router.get('/sell', async (req, res) => {
     const { stock_ticker, number_of_shares, avg_purchase_price } = req.query;
@@ -149,5 +150,6 @@ router.get('/sell', async (req, res) => {
     const currentDate = new Date().toISOString().split('T')[0];
     await pool.query("INSERT INTO transactions (portfolio_id,stock_ticker,number_of_shares,transaction_type,transaction_price,transaction_date) VALUES ($1,$2,$3,$4,$5,$6)", [portfolio_id.rows[0].portfolio_id, stock_ticker, number_of_shares, "SELL", avg_purchase_price * number_of_shares, currentDate]);
     await pool.query("UPDATE portfolios SET available_amount = available_amount + $1 WHERE id = $2", [avg_purchase_price * number_of_shares, req.user.id]);
+    res.status(200).send("Transaction Successful");
 })
 module.exports = router;
