@@ -34,7 +34,9 @@ function Details() {
     }
 
     useEffect(()=>{
-        async function getStocks(){     
+        //initially showing one year data
+        async function getStocks(){   
+            //backend call to get intraday,monthly,yearly data with an api call  
             await axios.get(`${config.BACKEND_URL}/stock/gethistory`,{params:{name:path}}).then((res)=>{
                 console.log(res.data);
                 setHistory(res.data);
@@ -172,6 +174,7 @@ function Details() {
                             format: currChoice === "1D" ? "%d %H:%M" : "%b %d",
                         },*/
                         axisBottom:{
+                            //setting the tick values to 5 equally spaced values
                             tickValues: data.map((d:any, index:number) => { if (index % Math.floor(data.length / 5) === 0) { return d.x; } return null;}).filter((value: any) => value !== null)
                         },
                         useMesh: true,

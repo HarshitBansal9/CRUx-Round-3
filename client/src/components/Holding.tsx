@@ -11,14 +11,6 @@ export function getPriceColor(change:number){
 }
 function Holding({stock_ticker,number_of_shares, currentPrice,value,unrealizedGain}:IPROPS) {
   return (
-    /*<div className="pb-2 pt-2 grid grid-cols-4 items-center">
-        <Link to={`../stocks/${stock_ticker}`} className="flex hover:underline items-center gap-2">
-            <span>{stock_ticker}</span>
-        </Link>
-        <div>{shares}</div>
-        <div>{price}</div>
-        <div className="text-right">${shares*price}</div>
-    </div>*/
     <tr className="border-b">
      <td className="py-4 px-4 hover:underline font-medium dark:text-gray-200"> <Link to={`../stocks/${stock_ticker}`}>{stock_ticker}</Link></td>
       <td className="py-4 px-4 dark:text-gray-200">{number_of_shares}</td>

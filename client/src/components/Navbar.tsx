@@ -14,6 +14,7 @@ const Navbar = ({user}:any) => {
     window.open(`${config.BACKEND_URL}/auth/logout`,"_self")
   };
   let navigate = useNavigate();
+  //adding a debounce to the search
   useEffect(()=>{
     const loadStocks = async ()=>{
       console.log(search);
@@ -41,6 +42,7 @@ const Navbar = ({user}:any) => {
         </div>
       </Combobox>
       <div className="flex flex-row  justify-evenly w-[350px] absolute right-[30px]">
+        {/* The following divs are conditionally rendered based on whether the user is logged in or not*/}
         <div onClick={()=>{if(!user) alert("Sign Up first")}} className='hover:cursor-pointer dark:text-gray-200 dark:hover:text-gray-500'><Link to={user?("/stocks"):("/")}>Stocks</Link></div>
         <div onClick={()=>{if(!user) alert("Sign Up first")}} className='hover:cursor-pointer dark:text-gray-200 dark:hover:text-gray-500'><Link to={user?("/friends"):("/")}>Friends</Link></div>
         <div onClick={()=>{if(!user) alert("Sign Up first")}} className='hover:cursor-pointer dark:text-gray-200 dark:hover:text-gray-500'><Link to={user?("/portfolio"):("/")}>Portfolio</Link></div>

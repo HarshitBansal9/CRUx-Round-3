@@ -35,6 +35,7 @@ router.get("/stockdetails", async (req, res) => {
 router.get("/gethistory", async (req, res) => {
     let currDate = new Date(new Date().getTime());
     const [year, month, week, day] = await Promise.all([
+        //api calls to get all the historical data
         yahooFinance.chart(req.query.name, { period1: new Date(currDate.getTime() - 365 * 24 * 60 * 60 * 1000), period2: currDate, interval: "1d" }),
         yahooFinance.chart(req.query.name, { period1: new Date(currDate.getTime() - 30 * 24 * 60 * 60 * 1000), period2: currDate, interval: "1d" }),
         yahooFinance.chart(req.query.name, { period1: new Date(currDate.getTime() - 7 * 24 * 60 * 60 * 1000), period2: currDate, interval: "5m" }),

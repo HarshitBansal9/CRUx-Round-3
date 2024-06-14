@@ -144,9 +144,11 @@ router.get('/sell', async (req, res) => {
     <h1>Transaction Successful</h1>
     <p>You have succesfully sold ${number_of_shares} shares of ${stock_ticker} at an average price of ${avg_purchase_price}</p>
     `;
+    //uses nodemailer to send mail to user
     sendMail(req.user.emails[0].value, html);
     const portfolio_id = await pool.query("SELECT portfolio_id FROM portfolios WHERE id = $1", [req.user.id]);
     await pool.query("UPDATE holdings SET number_of_shares = number_of_shares - $1, avg_purchase_price = $2 WHERE portfolio_id = $3 AND stock_ticker = $4", [number_of_shares, avg_purchase_price, portfolio_id.rows[0].portfolio_id, stock_ticker]);
+    //storing the data at which the stock was sold
     const currentDate = new Date().toISOString().split('T')[0];
     await pool.query("INSERT INTO transactions (portfolio_id,stock_ticker,number_of_shares,transaction_type,transaction_price,transaction_date) VALUES ($1,$2,$3,$4,$5,$6)", [portfolio_id.rows[0].portfolio_id, stock_ticker, number_of_shares, "SELL", avg_purchase_price * number_of_shares, currentDate]);
     await pool.query("UPDATE portfolios SET available_amount = available_amount + $1 WHERE id = $2", [avg_purchase_price * number_of_shares, req.user.id]);
